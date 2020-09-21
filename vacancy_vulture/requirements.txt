@@ -1,0 +1,7 @@
+bs4
+flask
+json
+find_job_titles
+selenium
+requests
+re

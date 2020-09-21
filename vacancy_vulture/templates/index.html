@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AIAM Job Data</title>
+  </head>
+
+  <body>
+  	<table>
+    {% for company, positions in jobs.items() %}
+        <h1> {{ company }} </h1>
+        {% for position_container in positions.items() %}
+        	{% for pos in position_container[1] %}
+	        	<p> {{ pos }} </p>
+	        {% endfor %}
+        {% endfor %}
+    {% endfor %}
+	</table>
+  </body>
+</html>
