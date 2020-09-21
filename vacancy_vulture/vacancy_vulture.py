@@ -142,8 +142,8 @@ def spider_page( url, keywords ):
     [ ret.extend( searchhrefs( pages, keyword, url ) ) for keyword in keywords ]
     return set( ret )
 
-
-for target in ['https://www.thermoanalytics.com','https://www.dornerworks.com','https://aerodynamicadvisory.com']:
+targets = [ ('https://www.thermoanalytics.com', 'thermoanalytics'), ('https://www.dornerworks.com', 'dornerworks'), ('https://aerodynamicadvisory.com','aerodynamicadvisory') ]
+for target, name in targets:
     print( "HARVESTING JOBS FOR {} ".format( target ) )
     keywords = [ 'career', 'job' ]
     possible_job_pages = spider_page( target, keywords )
@@ -179,7 +179,7 @@ for target in ['https://www.thermoanalytics.com','https://www.dornerworks.com','
     driver.close()
 
     print( 'Updating found jobs to firebase...' )
-    post_jobs( 'thermoanalytics', postings )
+    post_jobs( name, postings )
     print( 'Done updating!' )
 
 print( '\tFinished!' )

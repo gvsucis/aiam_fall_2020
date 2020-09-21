@@ -1,0 +1,32 @@
+1600656648723	geckodriver	INFO	Listening on 127.0.0.1:46947
+1600656648726	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileKQL2cc"
+console.error: SearchCache: "_readCacheFile: Error reading cache file:" (new Error("", "(unknown module)"))
+
+(firefox:23702): LIBDBUSMENU-GTK-CRITICAL **: 22:50:49.723: dbusmenu_menuitem_property_set_shortcut: assertion 'gtk_accelerator_valid(key, modifier)' failed
+1600656650176	Marionette	INFO	Listening on port 33851
+1600656650232	Marionette	WARN	TLS certificate errors will be ignored for this session
+1600656835943	geckodriver	INFO	Listening on 127.0.0.1:34875
+1600656835946	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileRfjwHA"
+console.error: SearchCache: "_readCacheFile: Error reading cache file:" (new Error("", "(unknown module)"))
+
+(firefox:23980): LIBDBUSMENU-GTK-CRITICAL **: 22:53:57.008: dbusmenu_menuitem_property_set_shortcut: assertion 'gtk_accelerator_valid(key, modifier)' failed
+1600656837548	Marionette	INFO	Listening on port 35341
+1600656837556	Marionette	WARN	TLS certificate errors will be ignored for this session
+1600656844459	Marionette	INFO	Stopped listening on port 35341
+1600656845961	geckodriver	INFO	Listening on 127.0.0.1:33407
+1600656845965	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileXmKdjb"
+console.error: SearchCache: "_readCacheFile: Error reading cache file:" (new Error("", "(unknown module)"))
+
+(firefox:24206): LIBDBUSMENU-GTK-CRITICAL **: 22:54:07.005: dbusmenu_menuitem_property_set_shortcut: assertion 'gtk_accelerator_valid(key, modifier)' failed
+1600656847511	Marionette	INFO	Listening on port 38347
+1600656847570	Marionette	WARN	TLS certificate errors will be ignored for this session
+1600656854644	Marionette	INFO	Stopped listening on port 38347
+1600656859931	geckodriver	INFO	Listening on 127.0.0.1:54861
+1600656859934	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofiles547Kg"
+console.error: SearchCache: "_readCacheFile: Error reading cache file:" (new Error("", "(unknown module)"))
+
+(firefox:24448): LIBDBUSMENU-GTK-CRITICAL **: 22:54:20.952: dbusmenu_menuitem_property_set_shortcut: assertion 'gtk_accelerator_valid(key, modifier)' failed
+1600656861622	Marionette	INFO	Listening on port 45541
+1600656861684	Marionette	WARN	TLS certificate errors will be ignored for this session
+1600656873241	Marionette	INFO	Stopped listening on port 45541
+1600656879012	Marionette	INFO	Stopped listening on port 33851
