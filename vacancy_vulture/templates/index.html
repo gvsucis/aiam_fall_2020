@@ -2,18 +2,42 @@
 <html>
   <head>
     <title>AIAM Job Data</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
   </head>
 
   <body>
-  	<table>
-    {% for company, positions in jobs.items() %}
-        <h1> {{ company }} </h1>
-        {% for position_container in positions.items() %}
-        	{% for pos in position_container[1] %}
-	        	<p> {{ pos }} </p>
-	        {% endfor %}
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-light">
+      <a class="navbar-brand" href="#">
+        <img src="/static/logo.png" width="80" height="75" class="d-inline-block align-top" alt="Loading" loading="...">
+      </a>
+      <h3 style="color:#122143;" class="lass="d-inline-block align-top">
+        AIAM Job Postings
+      </h3>
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="container" style=" background-color: #122143; color:white; padding:0px;" >
+      <div class="col-md" style="padding:0px;"></div>
+      <!-- JOBS -->
+        <div class="col-md" style="padding:0px;">
+      	<table>
+        {% for company, positions in jobs.items() %}
+            <div style="margin:5px; padding-bottom: 10px; padding:3px; padding-left:5px; background-color: #122143; color:white;">
+              <h1> {{ company }} </h1>
+            </div>
+            <div style="margin:0px; padding:0px; padding-top:10px; background-color: white; color:#122143;">
+            {% for position_container in positions.items() %}
+            	{% for pos in position_container[1] %}
+    	        	<p style="padding:0px; padding-bottom:15px; padding-left:30px;" > {{ pos }} </p>
+    	        {% endfor %}
+            {% endfor %}
+            </div>
         {% endfor %}
-    {% endfor %}
-	</table>
+    	</table>
+      </div>
+      <div class="col-md"></div>
+    </div>
   </body>
 </html>
