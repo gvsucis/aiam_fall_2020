@@ -1,5 +1,7 @@
 import scrapy
+import json
 
+PARAM_FILE = 'member_params.json'
 
 class Spider_General(scrapy.Spider):
     name = "general"
@@ -16,42 +18,16 @@ class Spider_General(scrapy.Spider):
         self.jobURLAttr = ''
 
     def start_requests(self):
-        f = open('/home/westoand/capstone/aiam/aiam/spiders/member_params.txt', 'r')
-        while True:
-            line = f.readline()
-            if not line:
-                break
-            self.company = line
-            line = f.readline()
-            if not line:
-                break
-            self.baseURL = line.strip()
-            line = f.readline()
-            if not line:
-                break
-            self.careersURL = line
-            line = f.readline()
-            if not line:
-                break
-            self.jobsListX = line
-            line = f.readline()
-            if not line:
-                break
-            self.jobX = line
-            line = f.readline()
-            if not line:
-                break
-            self.locationX = line
-            line = f.readline()
-            if not line:
-                break
-            self.jobURLX = line
-            line = f.readline()
-            if not line:
-                break
-            self.jobURLAttr = line
-            yield scrapy.Request(url=self.careersURL, callback=self.parse)
-            f.readline() #flush \n delimiter between scrape entries
+        # parse json file into dictionary
+        with open( PARAM_FILE, 'r' ) as f:
+            members = json.load( f )[ 'members' ]
+
+        for member in members:
+            self.company = member
+            # populate self variables from the current member subdictionary
+            self.__dict__ = members[member]
+            # supply scrapy with the data
+            yield scrapy.Request( url=self.careersURL, callback=self.parse )
 
 
     def parse(self, response):
