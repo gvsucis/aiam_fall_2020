@@ -10,6 +10,15 @@
 			"jobURLX":".//li[@class='careers__cta']/a",
 			"jobURLAttr":"href"
 		},
+		"liebherr": {
+			"baseURL": "https://www.liebherr.com/en/usa/start/start-page.html",
+			"careersURL": "https://www.liebherr.com/en/usa/career/job-vacancies/job-vacancies.html",
+			"jobsListX": "//li[@class='mysuccess-results_list-item']",
+			"jobX": ".//h2[@class='mysuccess-results_heading']/text()",
+			"locationX": ".//p[@class='mysuccess-results_standfirst']/text()",
+			"jobURLX": ".//a[@class='mysuccess-results_more']",
+			"jobURLAttr":"href"
+		},
 		"depusa": {
 			"baseURL": "https://www.depusa.com",
 			"careersURL": "http://depusa.force.com/careers/ts2__JobSearch",
