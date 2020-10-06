@@ -1,27 +1,16 @@
-import scrapy
-from scrapy.http import FormRequest
-from scrapy.utils.response import open_in_browser
+import scrapy 
 from ..items import TutorialItem
-
-
 class QuoteSpider(scrapy.Spider):
-    name = "quotess"
+    name = "quotes"
     page_number = 2
     start_urls = [
-        "http://quotes.toscrape.com/login"
+        "http://quotes.toscrape.com/page/1/"
     ]
     
     def parse(self, response):
-        token = response.css('form input::attr(value)').get()
-        return FormRequest.from_response(response, formdata={
-            'csrf_token': token,
-            'username': 'username',
-            'password': 'password'
-        }, callback=self.start_scraping)
 
-    def start_scraping(self, response):
-        open_in_browser(response)
         items = TutorialItem()
+
 
         all_div_quotes = response.css('div.quote')
 
