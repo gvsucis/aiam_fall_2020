@@ -13,8 +13,8 @@
   "content_scripts": [
     {
       //"matches": ["file:///home/xamroot/Documents/school/Capstone/aiam_fall_2020/aiam/interface/pathselector/test.html"],
-      "matches": ["*://*/*"]
-      //"js": ["pathselector.js"]
+      "matches": ["*://*/*"],
+      "js": ["jquery.js"]
     }
   ],
   "browser_action": {

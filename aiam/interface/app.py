@@ -27,12 +27,8 @@ def process():
 		temp[company_name] = data
 		write_json( params, fname )
 
-
-	#f =  open( 'member_params.json', )
-	#print(load(f))
-
-	#p = Popen( ['scrapy', 'crawl', 'general' ] )
-	#p.wait()
+	p = Popen( ['scrapy', 'crawl', 'general' ] )
+	p.wait()
 
 
 	chdir('interface')
