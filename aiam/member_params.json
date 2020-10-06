@@ -27,6 +27,15 @@
 			"locationX": ".//td[3]/span/text()",
 			"jobURLX": ".//td[1]/a",
 			"jobURLAttr": "href"
+		},
+		"geaviation":{
+			"baseURL": "https://www.geaviation.com",
+			"careersURL": "https://jobs.gecareers.com/aviation/global/en/search-results?keywords=michigan",
+			"jobsListX": ".job-title span",
+			"jobX": "",
+			"locationX": ".job-location",
+			"jobURLX": "",
+			"jobURLAttr": ""
 		}
 	}
 }

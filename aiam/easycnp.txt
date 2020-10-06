@@ -1,0 +1,7 @@
+			"baseURL": "",
+			"careersURL": "",
+			"jobsListX": "",
+			"jobX": "",
+			"locationX": "",
+			"jobURLX": "",
+			"jobURLAttr": ""
