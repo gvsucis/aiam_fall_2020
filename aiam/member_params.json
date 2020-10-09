@@ -1,23 +1,13 @@
 {
-	"members": 
-	{
-		"marposs": {
-			"baseURL": "https://marposs.com",
-			"careersURL": "https://marposs.com/eng/careers",
-			"jobsListX":"//ul[@class='careers']",
-			"jobX":".//li[@class='careers__description']/a/text()",
-			"locationX":".//li[@class='careers__net-price']/text()",
-			"jobURLX":".//li[@class='careers__cta']/a",
-			"jobURLAttr":"href"
-		},
-		"depusa": {
-			"baseURL": "https://www.depusa.com",
-			"careersURL": "http://depusa.force.com/careers/ts2__JobSearch",
-			"jobsListX": "/html/body/div[2]/div/div/div[1]/div/div/div/form/table/tbody/tr",
-			"jobX": ".//td[1]/a/text()",
-			"locationX": ".//td[3]/span/text()",
-			"jobURLX": ".//td[1]/a",
-			"jobURLAttr": "href"
-		}
-	}
+    "members": {
+        "XrayLab": {
+            "baseURL": "https://xray-lab.com",
+            "careersURL": "https://xray-lab.com/us/company/career/",
+            "jobListX": "",
+            "jobX": "//a/h2[contains(@class, \"grve-box-title\")]/span",
+            "locationX": "//div/div[contains(@class, \"grve-box-content\")]/p",
+            "jobURLX": "",
+            "jobURLAttr": ""
+        }
+    }
 }

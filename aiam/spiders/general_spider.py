@@ -1,5 +1,6 @@
 import scrapy
 import json
+from selenium import webdriver
 
 PARAM_FILE = 'member_params.json'
 
@@ -16,6 +17,14 @@ class Spider_General(scrapy.Spider):
         self.locationX = ''
         self.jobURLX = ''
         self.jobURLAttr = ''
+        self.driver = None
+
+    def write_profile(self):
+        with open('profiles/' + self.company + '-profile.txt', 'w') as profilef:
+            for key in self.__dict__:
+                if key == 'driver':
+                    continue
+                profilef.write( key + ' = ' + self.__dict__[key] )
 
     def start_requests(self):
         # parse json file into dictionary
@@ -26,31 +35,37 @@ class Spider_General(scrapy.Spider):
             # populate self variables from the current member subdictionary
             self.__dict__ = members[member]
             self.company = member
-            print("ABCHFHHCHE{}".format(self.company))
+            self.driver = webdriver.Firefox()
             # supply scrapy with the data
             yield scrapy.Request( url=self.careersURL, callback=self.parse )
 
     def parse(self, response):
         # formatting like this to work seamlessly with firebase
         data = { self.company: {} }
-        
-        jobs = response.xpath( self.jobX )
-        print(self.jobX)
-        print(jobs)
-        locations = response.xpath( self.locationX + '/text()')
 
-        f = open(self.company + "-jobs.txt", "w")
+        self.write_profile()
 
-        if len( self.locationX ) > 0:
-            for job, location in zip(jobs, locations):
-                f.write(job.get() + ' -- ' + location.get() + '\n' )
+        self.driver.get( response.url )
+        self.driver.implicitly_wait(5)
+
+        jobs = self.driver.find_elements_by_xpath( self.jobX )
+
+        f = open('results/' + self.company + "-jobs.txt", "w")
+        # location provided
+        if len(self.locationX) > 0:
+            
+            locations = self.driver.find_elements_by_xpath( self.locationX )
+
+            for job, location in zip(jobs,locations):
+                f.write( job.text + ' - ' + location.text + '\n' )
+        # no locations provided, only jobs
         else:
-            print("\n\n\n\n\nXYZ!")
-            for job in jobs:
-                print("JOBHERE!:{}".format(job.get()))
-                f.write(job.get() + ' -- ' + 'Local' + '\n' )
+            
+            for job in jobs:              
+                f.write( job.text + ' -- ' + 'Local' + '\n' )
 
         f.close()
+        self.driver.close()
 
         #jobs = response.xpath(self.jobX+'/text()')
 

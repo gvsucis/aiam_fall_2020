@@ -1,0 +1,1 @@
+baseURL = https://xray-lab.comcareersURL = https://xray-lab.com/us/company/career/jobListX = jobX = //a/h2[contains(@class, "grve-box-title")]/spanlocationX = //div/div[contains(@class, "grve-box-content")]/pjobURLX = jobURLAttr = company = XrayLab

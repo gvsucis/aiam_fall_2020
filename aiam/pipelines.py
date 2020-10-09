@@ -9,5 +9,6 @@ from itemadapter import ItemAdapter
 
 
 class AiamPipeline:
-    def process_item(self, item, spider):
-        return item
+	def process_item(self, item, spider):
+		print("XXX{}".format(item));
+		return item

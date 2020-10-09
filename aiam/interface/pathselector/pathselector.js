@@ -13,8 +13,8 @@ function getPathTo( element, recursion ) {
 
     //if (element.id!=='')
     //    ret = ret + 'id("' + element.id + '")';
-   if (element===document.body || recursion >= 4 )
-        ret = element.tagName
+   if (element===document.body || recursion >= 2 )
+        ret = element.tagName.toLowerCase()
    	else 
    	{
    		var ix= 0;
@@ -46,7 +46,7 @@ function getPathTo( element, recursion ) {
 	        	//}
 	        	
 
-	            ret = ret + getPathTo(element.parentNode, recursion+1)+'/'+ element.tagName + classData + index;
+	            ret = ret + getPathTo(element.parentNode, recursion+1)+'/'+ element.tagName.toLowerCase() + classData + index;
 	        }
 	        if (sibling.nodeType===1 && sibling.tagName===element.tagName)
 	            ix++;
@@ -104,14 +104,13 @@ const getLeafNodes = ( rootNode ) => {
 				{
 					console.log("QQQQQQQQQQQQQ");
 					item = item.parentElement;
-				}*/
-				
+				}*/			
+				console.log(item);	
 				item.addEventListener( "click", () => {
 					let newPath = getPathTo( item, 0 );
-					console.log( newPath );
 					updateClipboard( newPath );
-					return false;
 				} )
+
 			}
 			catch (e) {
 				console.log("ERR " + e);
@@ -119,7 +118,7 @@ const getLeafNodes = ( rootNode ) => {
 		}
 		else
 		{
-			getLeafNodes( item );
+			return getLeafNodes( item );
 		}
 		
 	});
