@@ -24,8 +24,8 @@ def process():
 	with open( fname ) as j: 
 		params = load( j )
 		#temp = params['members']
-		params['members'] = {}
-		temp = params['members']
+		params["members"] = {}
+		temp = params["members"]
 		temp[company_name] = data
 		write_json( params, fname )
 

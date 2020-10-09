@@ -1,0 +1,1 @@
+baseURL = https://www.woodward.com/homecareersURL = https://woodward.taleo.net/careersection/2/jobsearch.ftl?lang=enjobListX = jobX = //*/th/div/div/span/alocationX = //*/td[2]/div/div/spanjobURLX = jobURLAttr = company = Woodward

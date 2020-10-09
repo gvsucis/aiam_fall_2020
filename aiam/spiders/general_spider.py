@@ -35,7 +35,7 @@ class Spider_General(scrapy.Spider):
             # populate self variables from the current member subdictionary
             self.__dict__ = members[member]
             self.company = member
-            self.driver = webdriver.Firefox()
+            self.driver = webdriver.Chrome(executable_path="chromedriver.exe")
             # supply scrapy with the data
             yield scrapy.Request( url=self.careersURL, callback=self.parse )
 
