@@ -1,0 +1,1 @@
+baseURL = https://www.jacksonflex.com/careersURL = https://www.jacksonflex.com/now-hiringjobX = //li//h3locationX = company = Jackson Flexible

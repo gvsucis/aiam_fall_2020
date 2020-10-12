@@ -1,0 +1,1 @@
+baseURL = https://miat.edu/campuses/canton-michigan/careersURL = https://miat.edu/careers/jobX = //*[contains(concat( " ", @class, " " ), concat( " ", "job-posting-title", " " ))]locationX = company = MIAT

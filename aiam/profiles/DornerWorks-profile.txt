@@ -1,0 +1,1 @@
+baseURL = https://dornerworks.comcareersURL = https://dornerworks.com/careers/jobX = //*[(@id = "gnewtonIframe")]locationX = company = DornerWorks

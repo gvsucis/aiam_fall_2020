@@ -1,0 +1,1 @@
+baseURL = https://www.rockwellautomation.com/lang-selection.htmlcareersURL = https://xjobs.brassring.com/TGnewUI/Search/Home/Home?partnerid=12166&siteid=105#keyWordSearch=&locationSearch=michiganjobX = //*[@id="mainJobListContainer"]/div/div/ul/li[1]/div[2]/div[1]locationX = //*[@id="mainJobListContainer"]/div/div/ul/li[1]/div[2]/div[2]company = Rockwell Animation

@@ -1,0 +1,1 @@
+baseURL = https://www.calumetelectronics.comcareersURL = https://www.calumetelectronics.com/Hiring/ApplicationjobX = //br//h3locationX = company = Calumetelectronics
