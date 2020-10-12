@@ -8,6 +8,16 @@
             "locationX": "//*/td[2]/div/div/span",
             "jobURLX": "",
             "jobURLAttr": ""
+        },
+        "JRAutomation": {
+            "baseURL": "https://www.jrautomation.com/industries/aerospace-and-defense",
+            "careersURL": "https://www.jrautomation.com/careers/jobs#/?regions=michigan",
+            "jobListX": "//div[@class='results-wrapper']",
+            "jobX": ".//div[@class='result ng-scope']/a/span[@class='title ng-binding']/text()",
+            "locationX": ".//div[@class='result ng-scope']/a/span[@class='secondary ng-binding']/text()",
+            "jobURLX": ".//div[@class='result ng-scope']/a",
+            "jobURLAttr": "href"
         }
+
     }
 }
