@@ -1,0 +1,1 @@
+baseURL = https://www.jrautomation.com/careersURL = https://www.jrautomation.com/careers/jobs#/?regions=michiganjobX = //*[contains(concat( " ", @class, " " ), concat( " ", "result", " " ))]//*[contains(concat( " ", @class, " " ), concat( " ", "ng-binding", " " ))]locationX = company = JR Automation

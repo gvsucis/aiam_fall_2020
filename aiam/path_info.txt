@@ -1,0 +1,17 @@
+Testek Solutions
+joblist = /html/body/div[3]/div/div[7]/div/div/div/div/div/div/div/div[1]/div[2]
+location = n/a
+
+Skilled manufacturing
+joblist = //tbody/tr/td/div/div
+
+AMT
+joblist =//*[(@id = "lblTitle")]
+location =//*[contains(concat( " ", @class, " " ), concat( " ", "current-opening-location-item", " " ))]//span
+
+RAPITA
+joblist = //*[contains(concat( " ", @class, " " ), concat( " ", "col-sm-4", " " ))]//p
+locations = //td[contains(concat( " ", @class, " " ), concat( " ", "views-field-field-vacancy-location", " " ))]
+
+JR Automation
+joblist = //*[@id="MainContent"]/div/div/div/div

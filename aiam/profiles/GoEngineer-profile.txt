@@ -1,0 +1,1 @@
+baseURL = https://www.goengineer.com/careersURL = https://www.paycomonline.net/v4/ats/web.php/jobs?clientkey=C42564F3C5961089257430FA178BE081&session_nonce=9c128299b41fbd95e1b4a1d167fd66d3jobX = //*[contains(concat( " ", @class, " " ), concat( " ", "jobTitle", " " ))]locationX = company = GoEngineer

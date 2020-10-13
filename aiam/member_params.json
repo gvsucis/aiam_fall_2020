@@ -1,9 +1,9 @@
 {
     "members": {
-        "Baker Engineering": {
-            "baseURL": "http://www.bakerengineeringmfg.com/",
-            "careersURL": "https://www.indeedjobs.com/baker-engineerring-inc/_hl/en_US?cpref=JXWAtnzf3XWjLOi4YeVNLuV7xMD8uRK8E_Yec52RpIY",
-            "jobX": "//p",
+        "NovaStar": {
+            "baseURL": "https://www.novastar.net",
+            "careersURL": "https://www.novastar.net/careers/",
+            "jobX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"tb_title_accordion\", \" \" ))]",
             "locationX": ""
         }
     }

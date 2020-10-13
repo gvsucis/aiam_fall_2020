@@ -1,0 +1,1 @@
+baseURL = https://www.rapitasystems.com/careersURL = https://www.rapitasystems.com/about/careersjobX = //col-sm-4//plocationX = //tdcompany = RAPITA

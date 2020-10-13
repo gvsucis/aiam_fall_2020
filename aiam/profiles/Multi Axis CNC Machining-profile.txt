@@ -1,0 +1,1 @@
+baseURL = http://www.unitedcncmachining.com/careersURL = http://www.unitedcncmachining.com/about_us/join_our_teamjobX = //*[contains(concat( " ", @class, " " ), concat( " ", "col-sm-4", " " ))]//plocationX = company = Multi Axis CNC Machining
