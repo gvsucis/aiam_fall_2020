@@ -1,1 +1,1 @@
-baseURL = https://www.rapitasystems.com/careersURL = https://www.rapitasystems.com/about/careersjobX = //*[contains(concat( " ", @class, " " ), concat( " ", "col-sm-4", " " ))]//plocationX = //td[contains(concat( " ", @class, " " ), concat( " ", "views-field-field-vacancy-location", " " ))]company = 
+baseURL = http://depusa.force.comcareersURL = http://depusa.force.com/careers/ts2__JobSearchjobX = //*[(@id = "j_id0\:j_id1\:atsForm\:atsSearchResultsTable\:tb")]//alocationX = //*[(@id = "j_id0\:j_id1\:atsForm\:atsSearchResultsTable\:tb")]//spancompany = 

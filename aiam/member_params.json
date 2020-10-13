@@ -1,9 +1,9 @@
 {
     "members": {
-        "Alro Steel": {
-            "baseURL": "https://www.alro.com",
-            "careersURL": "https://jobs-alro.icims.com/jobs/search?ics_geolocation=Michigan",
-            "jobX": "/html/body/div[2]/div[6]/div/div[2]/div[1]/div[2]/a",
+        "Marposs": {
+            "baseURL": "https://www.marposs.com/",
+            "careersURL": "https://www.marposs.com/eng/careers",
+            "jobX": "//*[@id=\"container\"]/main/section[2]/div/div/div/div[3]/div/ul/li",
             "locationX": ""
         }
     }
