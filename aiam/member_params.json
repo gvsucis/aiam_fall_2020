@@ -1,9 +1,9 @@
 {
     "members": {
-        "NovaStar": {
-            "baseURL": "https://www.novastar.net",
-            "careersURL": "https://www.novastar.net/careers/",
-            "jobX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"tb_title_accordion\", \" \" ))]",
+        "Alro Steel": {
+            "baseURL": "https://www.alro.com",
+            "careersURL": "https://jobs-alro.icims.com/jobs/search?ics_geolocation=Michigan",
+            "jobX": "/html/body/div[2]/div[6]/div/div[2]/div[1]/div[2]/a",
             "locationX": ""
         }
     }

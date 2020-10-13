@@ -1,0 +1,1 @@
+baseURL = https://www.alro.comcareersURL = https://jobs-alro.icims.com/jobs/search?ics_geolocation=MichiganjobX = /html/body/div[2]/div[6]/div/div[2]/div[1]/div[2]/alocationX = company = Alro Steel

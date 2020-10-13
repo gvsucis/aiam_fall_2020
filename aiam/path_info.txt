@@ -1,3 +1,6 @@
+The following is a list of Companies that I could not get the proper results for
+using the joblist and location xpaths below.
+
 Testek Solutions
 joblist = /html/body/div[3]/div/div[7]/div/div/div/div/div/div/div/div[1]/div[2]
 location = n/a
@@ -15,3 +18,12 @@ locations = //td[contains(concat( " ", @class, " " ), concat( " ", "views-field-
 
 JR Automation
 joblist = //*[@id="MainContent"]/div/div/div/div
+
+Lee Contracting
+joblist = /html/body/div[2]/div[7]/div[1]/div/a/span[2]
+
+Cooling Tech Group
+joblist = //*[contains(concat( " ", @class, " " ), concat( " ", "gdlr-core-skin-title", " " ))]//a
+
+Alro Steel
+joblist = /html/body/div[2]/div[6]/div/div[2]/div[1]/div[2]/a/span/span
