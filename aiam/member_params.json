@@ -1,9 +1,9 @@
 {
     "members": {
-        "Marposs": {
-            "baseURL": "https://www.marposs.com/",
-            "careersURL": "https://www.marposs.com/eng/careers",
-            "jobX": "//*[@id=\"container\"]/main/section[2]/div/div/div/div[3]/div/ul/li",
+        "Aerospace Engineering": {
+            "baseURL": "https://aero.engin.umich.edu/",
+            "careersURL": "https://aero.engin.umich.edu/careers/employment/",
+            "jobX": "//html/body/div[3]/div[3]/div[2]/section[1]/h4",
             "locationX": ""
         }
     }

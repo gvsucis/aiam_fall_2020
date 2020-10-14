@@ -1,0 +1,1 @@
+baseURL = https://aero.engin.umich.edu/careersURL = https://aero.engin.umich.edu/careers/employment/jobX = //html/body/div[3]/div[3]/div[2]/section[1]/h4locationX = company = Aerospace Engineering
