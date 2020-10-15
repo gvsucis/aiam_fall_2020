@@ -1,60 +1,20 @@
-ACCOUNTS PAYABLE SPECIALIST -- Local
-Accounting -- Local
-Auburn Hills, Michigan -- Local
-ADMINISTRATIVE ASSISTANT / RECEPTIONIST -- Local
-Administrative -- Local
-Sterling Heights, Michigan -- Local
-APPLICATION ENGINEER -- Local
-Applications Engineering (Quoting) -- Local
-Auburn Hills, Michigan -- Local
-APPLICATION ENGINEER II -- Local
-Applications Engineering (Quoting) -- Local
-Nashville, Tennessee -- Local
-APPLICATIONS ENGINEER -- Local
-Applications Engineering (Quoting) -- Local
-Holland, Michigan -- Local
-ASSISTANT / TECHNICAL EXECUTIVE -- Local
-Assembly -- Local
-Singapore, SG -- Local
-ASSOCIATE BUYER -- Local
-Supply Chain -- Local
-Sterling Heights, Michigan -- Local
-BILINGUAL SR. CONTROLS ENGINEER (SIEMENS) -- Local
-Controls Engineering -- Local
-Nashville, Tennessee -- Local
-BUYER -- Local
-Supply Chain -- Local
-Holland, Michigan -- Local
-CONTROLS ENGINEER -- Local
-Controls Engineering -- Local
-Auburn Hills, Michigan -- Local
-CONTROLS ENGINEER -- Local
-Controls Engineering -- Local
-Auburn Hills, Michigan -- Local
-CONTROLS ENGINEER -- Local
-Controls Engineering -- Local
-Sterling Heights, Michigan -- Local
-CONTROLS ENGINEER -- Local
-Controls Engineering -- Local
-Liberty, South Carolina -- Local
-CONTROLS ENGINEER - HOLLAND, MI -- Local
-Controls Engineering -- Local
-Holland, Michigan -- Local
-CONTROLS ENGINEER | SUMMER 2021 | CO-OP AND INTERNSHIP -- Local
-Controls Engineering -- Local
-Holland, Michigan -- Local
-CONTROLS ENGINEER | SUMMER 2021 | CO-OP AND INTERNSHIP -- Local
-Controls Engineering -- Local
-Liberty, South Carolina -- Local
-CONTROLS LEAD -- Local
-Controls Engineering -- Local
-Sterling Heights, Michigan -- Local
-DEPLOYMENT CONTROLS ENGINEER -- Local
-Controls Engineering -- Local
-Holland, Michigan -- Local
-DIRECTOR OF AFTERMARKET OPERATIONS -- Local
-Aftermarket -- Local
-Holland, Michigan -- Local
-ELECTRICAL ASSEMBLER -- Local
-Electrical -- Local
-Liberty, South Carolina -- Local
+ACCOUNTS PAYABLE SPECIALIST - Auburn Hills, Michigan
+ACCOUNTS PAYABLE SPECIALIST - Auburn Hills, Michigan
+ADMINISTRATIVE ASSISTANT / RECEPTIONIST - Sterling Heights, Michigan
+APPLICATION ENGINEER - Auburn Hills, Michigan
+APPLICATION ENGINEER II - Nashville, Tennessee
+APPLICATIONS ENGINEER - Holland, Michigan
+ASSISTANT / TECHNICAL EXECUTIVE - Singapore, SG
+ASSOCIATE BUYER - Sterling Heights, Michigan
+BILINGUAL SR. CONTROLS ENGINEER (SIEMENS) - Nashville, Tennessee
+BUYER - Holland, Michigan
+CONTROLS ENGINEER - Sterling Heights, Michigan
+CONTROLS ENGINEER - Auburn Hills, Michigan
+CONTROLS ENGINEER - Auburn Hills, Michigan
+CONTROLS ENGINEER - Sterling Heights, Michigan
+CONTROLS ENGINEER - Liberty, South Carolina
+CONTROLS ENGINEER - HOLLAND, MI - Holland, Michigan
+CONTROLS ENGINEER | SUMMER 2021 | CO-OP AND INTERNSHIP - Holland, Michigan
+CONTROLS ENGINEER | SUMMER 2021 | CO-OP AND INTERNSHIP - Liberty, South Carolina
+CONTROLS LEAD - Sterling Heights, Michigan
+DEPLOYMENT CONTROLS ENGINEER - Holland, Michigan
