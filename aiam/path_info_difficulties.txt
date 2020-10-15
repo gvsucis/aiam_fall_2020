@@ -38,3 +38,6 @@ joblist = //*[(@id = "j_id0\:j_id1\:atsForm\:atsSearchResultsTable\:tb")]//a
 Marposs
 joblist = //*[@id="container"]/main/section[2]/div/div/div/div[3]/div/ul/li
 
+DornerWorks
+joblist = '/html/body/div[2]/div[7]/div/div[3]/a/span[2]'
+

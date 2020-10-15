@@ -45,11 +45,11 @@ class Spider_General(scrapy.Spider):
 
         self.write_profile()
 
-        self.driver.get( response.url )
-        self.driver.implicitly_wait(5)
+        #self.driver.get( response.url )
+        #self.driver.implicitly_wait(5)
 
-        jobs = self.driver.find_elements_by_xpath( self.jobX )
-
+        #jobs = self.driver.find_elements_by_xpath( self.jobX )
+        jobs = response.xpath(self.jobX + "/text()")
         f = open('results/' + self.company + "-jobs.txt", "w")
         # location provided
         if len(self.locationX) > 0:
@@ -62,10 +62,10 @@ class Spider_General(scrapy.Spider):
         else:
             
             for job in jobs:              
-                f.write( job.text + ' -- ' + 'Local' + '\n' )
+                f.write( job.get() + ' -- ' + 'Local' + '\n' )
 
         f.close()
-        self.driver.close()
+        #self.driver.close()
 
         #jobs = response.xpath(self.jobX+'/text()')
 

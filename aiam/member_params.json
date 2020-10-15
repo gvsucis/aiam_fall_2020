@@ -1,9 +1,9 @@
 {
     "members": {
-        "Marposs": {
-            "baseURL": "https://www.marposs.com/",
-            "careersURL": "https://www.marposs.com/eng/careers",
-            "jobX": "//*[@id=\"container\"]/main/section[2]/div/div/div/div[3]/div/ul/li",
+        "Uhy-US": {
+            "baseURL": "https://uhy-us.com/",
+            "careersURL": "https://careers-uhy-us.icims.com/jobs/search?in_iframe=1&hashed=-435653271",
+            "jobX": "//div[@class='col-xs-12 title']/a/span[2]",
             "locationX": ""
         }
     }
