@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from subprocess import Popen, PIPE
-from os import chdir
+from os import chdir, listdir
 from json import load, dump
 
 app = Flask(__name__)
@@ -36,10 +36,24 @@ def process():
 	chdir('interface')
 	return 'success'
 
+@app.route('/run_scrapes', methods = ['POST'])
+def run_scrapes():
+	print( request.form );
+	return 'success'
+
+@app.route('/scrape_profiles')
+def scrape_profiles():
+	scrape_profile_names = []
+	for scrape_profile in listdir('../profiles'):
+		try:
+				scrape_profile_names.append( scrape_profile.strip('-profile.txt') )
+		except:
+			continue
+	return {'data':scrape_profile_names}
 
 @app.route('/')
 def hello_world():
-    return render_template('interface.html')
+	return render_template('interface.html', scrape_profile_api='http://0.0.0.0:9001/scrape_profiles', profiles=['a','b','c'])
 
 if __name__ == "__main__":
-	app.run( '0.0.0.0', 8080 )
+	app.run( '0.0.0.0', 9001 )
