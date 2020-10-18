@@ -1,5 +1,6 @@
 import scrapy
 import json
+from aiam.Models import AddCompany
 
 PARAM_FILE = 'member_params.json'
 
@@ -24,8 +25,12 @@ class Spider_General(scrapy.Spider):
 
         for member in members:
             self.company = member
+            self.baseURL = members[member]['baseURL']
+            self.careersURL = members[member]['careersURL']
+            AddCompany(self)
             # populate self variables from the current member subdictionary
             self.__dict__ = members[member]
+            self.company = member
             # supply scrapy with the data
             yield scrapy.Request( url=self.careersURL, callback=self.parse )
 
@@ -36,4 +41,5 @@ class Spider_General(scrapy.Spider):
                 'job': jobs.xpath(self.jobX).get(),
                 'location': jobs.xpath(self.locationX).get(),
                 'jobURL': self.baseURL + jobs.xpath(self.jobURLX).attrib[self.jobURLAttr],
+                'company': self.company,
             }
