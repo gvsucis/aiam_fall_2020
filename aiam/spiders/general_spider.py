@@ -20,11 +20,14 @@ class Spider_General(scrapy.Spider):
         self.driver = None
 
     def write_profile(self):
-        with open('profiles/' + self.company + '-profile.txt', 'w') as profilef:
+        with open('profiles/' + self.company + '-profile.json', 'w') as profilef:
+            profile = {}
             for key in self.__dict__:
                 if key == 'driver':
                     continue
-                profilef.write( key + ' = ' + self.__dict__[key] )
+                else:
+                    profile[ key ] = self.__dict__[key]
+            profilef.write( json.dump( profile ) )
 
     def start_requests(self):
         # parse json file into dictionary
