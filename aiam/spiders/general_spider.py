@@ -1,6 +1,7 @@
 import scrapy
 import json
 from selenium import webdriver
+from os import name
 
 PARAM_FILE = 'member_params.json'
 
@@ -19,6 +20,7 @@ class Spider_General(scrapy.Spider):
         self.jobURLAttr = ''
         self.driver = None
 
+
     def write_profile(self):
         with open('profiles/' + self.company + '-profile.json', 'w') as profilef:
             profile = {}
@@ -27,9 +29,15 @@ class Spider_General(scrapy.Spider):
                     continue
                 else:
                     profile[ key ] = self.__dict__[key]
-            profilef.write( json.dump( profile ) )
+            json.dump( profile, profilef )
+
 
     def start_requests(self):
+
+        target_chrome_driver = './ChromeDrivers/linux_chromedriver'
+        if name == 'nt':
+            target_chrome_driver = './ChromeDrivers/chromedriver.exe'
+
         # parse json file into dictionary
         with open( PARAM_FILE, 'r' ) as f:
             members = json.load( f )[ 'members' ]
@@ -38,14 +46,13 @@ class Spider_General(scrapy.Spider):
             # populate self variables from the current member subdictionary
             self.__dict__ = members[member]
             self.company = member
-            self.driver = webdriver.Chrome(executable_path="chromedriver.exe")
+            self.driver = webdriver.Chrome(executable_path=target_chrome_driver)
             # supply scrapy with the data
             yield scrapy.Request( url=self.careersURL, callback=self.parse )
 
-    def parse(self, response):
-        # formatting like this to work seamlessly with firebase
-        data = { self.company: {} }
 
+    def parse(self, response):
+        data = { self.company: {} }
         self.write_profile()
 
         #self.driver.get( response.url )
@@ -66,32 +73,6 @@ class Spider_General(scrapy.Spider):
             
             for job in jobs:              
                 f.write( job.get() + ' -- ' + 'Local' + '\n' )
-
         f.close()
-        #self.driver.close()
 
-        #jobs = response.xpath(self.jobX+'/text()')
-
-        #loc = response.xpath(self.jobX)
-
-        #urls = ""
-        #if jobURLAttr != "N/A":
-        #    urls = response.xpath(self.jobURLX).attrib[self.jobURLAttr],
-
-        '''
-        for job, location,  in ( response.xpath(self.jobsListX), res:
-        # each job to yield fits this dict pattern
-        new_job_title = xpath(self.jobX).get()
-        '''
-        '''
-        for job in jobs:
-            print(job)
-            new_job_info = {
-                'location': 'Ann Arbor', #jobs.xpath(self.locationX).get(),
-                'jobURL': self.jobURLX #self.baseURL + jobs.xpath(self.jobURLX).attrib[self.jobURLAttr]
-            }
-
-            # add the job to the current list of company jobs
-            data[ self.company ][job.get()] = new_job_info
-        '''
         yield data
