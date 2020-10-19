@@ -19,7 +19,7 @@ def get_profile( filename ):
 	with open( filename ) as p:
 		try:
 			profile = load( p )
-			profile = loads( profile )
+			#profile = loads( profile )
 		except:
 			return 'err'
 	return profile
@@ -32,15 +32,16 @@ def clear_memberparams():
 		temp = params["members"]
 		write_json( params, MEMBER_PARAMS_FILENAME )
 
-
+'''
 def load_profiles_into_memberparams( profile ):
-	data = {'members':[]}
-	with open( MEMBER_PARAMS_FILENAME ) as f:
+	with open( MEMBER_PARAMS_FILENAME ) as f: 
 		params = load( f )
+		#temp = params['members']
+		#params["members"] = {}
 		temp = params["members"]
-		print(profile)
-		temp[ profile.pop('company') ] = profile
+		temp[company_name] = data
 		write_json( params, MEMBER_PARAMS_FILENAME )
+'''
 
 
 def scrape():
@@ -57,6 +58,8 @@ def process():
 	company_name = data.pop( 'company' )
 	print(data)
 	print(company_name)
+	if 'useDriver' not in data:
+		data['useDriver'] = 'off'
 
 	chdir('../')
 	fname = 'member_params.json'
@@ -80,10 +83,19 @@ def run_scrapes():
 
 	clear_memberparams()
 
+	params = {"members":{}}
+
 	for member_profile_file in data:
 		profile = get_profile( PROFILES_PATHNAME + member_profile_file )
 		if type(profile) == dict:
-			load_profiles_into_memberparams( profile )
+			company_name = profile.pop('company') 
+			params['members'][company_name] = profile
+			print(params)
+			#load_profiles_into_memberparams( profile )
+
+	with open( MEMBER_PARAMS_FILENAME ) as j: 
+		write_json( params, MEMBER_PARAMS_FILENAME )
+
 	scrape()
 	return 'success'
 
@@ -100,7 +112,7 @@ def scrape_profiles():
 
 @app.route('/')
 def hello_world():
-	return render_template('interface.html', scrape_profile_api='http://0.0.0.0:9000/scrape_profiles', profiles=['a','b','c'])
+	return render_template('interface.html', scrape_profile_api='http://0.0.0.0:8000/scrape_profiles', profiles=['a','b','c'])
 
 if __name__ == "__main__":
-	app.run( '0.0.0.0', 9000 )
+	app.run( '0.0.0.0', 8000 )

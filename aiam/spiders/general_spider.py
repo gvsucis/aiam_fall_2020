@@ -19,6 +19,7 @@ class Spider_General(scrapy.Spider):
         self.jobURLX = ''
         self.jobURLAttr = ''
         self.driver = None
+        self.useDriver = 'on'
 
 
     def write_profile(self):
@@ -38,6 +39,8 @@ class Spider_General(scrapy.Spider):
         if name == 'nt':
             target_chrome_driver = './ChromeDrivers/chromedriver.exe'
 
+        print("HIT")
+
         # parse json file into dictionary
         with open( PARAM_FILE, 'r' ) as f:
             members = json.load( f )[ 'members' ]
@@ -55,24 +58,41 @@ class Spider_General(scrapy.Spider):
         data = { self.company: {} }
         self.write_profile()
 
-        #self.driver.get( response.url )
-        #self.driver.implicitly_wait(5)
-
-        #jobs = self.driver.find_elements_by_xpath( self.jobX )
-        jobs = response.xpath(self.jobX + "/text()")
         f = open('results/' + self.company + "-jobs.txt", "w")
-        # location provided
-        if len(self.locationX) > 0:
-            
-            locations = self.driver.find_elements_by_xpath( self.locationX )
 
-            for job, location in zip(jobs,locations):
-                f.write( job.text + ' - ' + location.text + '\n' )
-        # no locations provided, only jobs
+        # scrape with selenium
+        if self.useDriver == 'on':
+
+            print("\n\n\nHIT!\n\n\n")
+
+            self.driver.get( self.careersURL )
+            self.driver.implicitly_wait( 5 ) # seconds
+
+            jobs = self.driver.find_elements_by_xpath( self.jobX )
+            # location provided
+            if len(self.locationX) > 0:
+                locations = self.driver.find_elements_by_xpath( self.locationX )
+                for job, location in zip(jobs,locations):
+                    f.write( job.text + ' - ' + location.text + '\n' )
+            # no locations provided, only jobs
+            else:
+                for job in jobs:              
+                    f.write( job.text + ' -- ' + 'Local' + '\n' )
+
+        # scrape without selenium
         else:
-            
-            for job in jobs:              
-                f.write( job.get() + ' -- ' + 'Local' + '\n' )
+            jobs = response.xpath(self.jobX + "/text()")
+            f = open('results/' + self.company + "-jobs.txt", "w")
+            # location provided
+            if len(self.locationX) > 0:
+                locations = response.xpath( self.locationX + "/text()" )
+                for job, location in zip(jobs,locations):
+                    f.write( job.get() + ' - ' + location.get() + '\n' )
+            # no locations provided, only jobs
+            else:
+                for job in jobs:              
+                    f.write( job.get() + ' -- ' + 'Local' + '\n' )
+        
         f.close()
 
         yield data

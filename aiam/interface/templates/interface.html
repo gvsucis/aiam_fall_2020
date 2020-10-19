@@ -34,6 +34,9 @@
 					<label for="locationX">Location Xpath: &emsp;&emsp;</label>
 					<input type="text" id="locationX" name="locationX"><br><br>
 
+					<label for="useDriver">Use Web Driver &emsp;&emsp;</label>
+					<input type="checkbox" id="useDriver" name="useDriver"><br><br>
+
 					<input type="submit" value="Submit">
 				</form> 
 			</div>
@@ -65,6 +68,9 @@
    			newCheckbox.id = p + "checkbox";
    			newCheckbox.className = "scrape-profile-checkbox";
    			newCheckbox.name = p;
+
+   			p = p.replace( '-profile.json', '' );
+   			p = '\t' + p
 
    			newSpan.appendChild( document.createTextNode( p ) );
 
