@@ -1,0 +1,1 @@
+{"baseURL": "https://xray-lab.com/us/", "careersURL": "https://xray-lab.com/us/company/career/jobListX = ", "jobX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"grve-box-title\", \" \" ))]//span", "locationX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"grve-box-content\", \" \" ))]//pjobURLX = jobURLAttr = ", "company": "XRAY-LAB"}

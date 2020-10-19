@@ -1,1 +1,0 @@
-baseURL = https://www.novastar.netcareersURL = https://www.novastar.net/careers/jobX = //*[contains(concat( " ", @class, " " ), concat( " ", "tb_title_accordion", " " ))]locationX = company = NovaStar

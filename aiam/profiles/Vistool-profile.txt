@@ -1,1 +1,0 @@
-baseURL = https://vistool.com/careersURL = https://vistool.applicantpro.com/jobs/jobX = //h4locationX = //*[(@id = "job_listings")]//li[(((count(preceding-sibling::*) + 1) = 2) and parent::*)]company = Vistool

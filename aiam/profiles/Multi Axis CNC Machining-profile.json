@@ -1,0 +1,1 @@
+{"baseURL": "http://www.unitedcncmachining.com/", "careersURL": "http://www.unitedcncmachining.com/about_us/join_our_team", "jobX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"col-sm-4\", \" \" ))]//p", "locationX": "", "company": "Multi Axis CNC Machining"}

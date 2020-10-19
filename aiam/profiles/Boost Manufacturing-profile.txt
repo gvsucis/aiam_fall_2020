@@ -1,1 +1,0 @@
-baseURL = https://5me.com/careersURL = https://5me.com/the-company/careers/jobX = locationX = company = Boost Manufacturing

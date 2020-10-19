@@ -1,0 +1,1 @@
+{"baseURL": "https://www.thermoanalytics.com/", "careersURL": "https://tai.hirescore.com/", "jobX": "//h3", "locationX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"location\", \" \" ))]", "company": "ThermoAnalytics"}

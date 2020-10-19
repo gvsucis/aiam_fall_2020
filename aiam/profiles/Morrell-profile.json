@@ -1,0 +1,1 @@
+{"baseURL": "https://morrell-group.com", "careersURL": "https://morrell-group.com/careers/", "jobX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"widget_black_studio_tinymce\", \" \" ))]//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"widget-title\", \" \" ))]", "locationX": "", "company": "Morrell"}
