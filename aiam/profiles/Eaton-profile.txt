@@ -1,1 +1,0 @@
-baseURL = https://www.eaton.com/us/en-us.htmlcareersURL = https://jobs.eaton.com/jobs?keywords=&location=michiganjobX = //*[@class='job-title-link']locationX = //div[@class='job-card-result-container job-result__location ng-star-inserted']/p/span[@class='label-value location']company = Eaton

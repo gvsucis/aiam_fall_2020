@@ -1,1 +1,0 @@
-baseURL = https://www.toolingtechgroup.comcareersURL = https://www.toolingtechgroup.com/careers/jobX = //*/div[2]/div/div/div/div[2]/div[2]/div/div/div[1]/div/h3/alocationX = company = Cooling Tech Group

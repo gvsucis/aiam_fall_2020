@@ -1,1 +1,0 @@
-baseURL = https://www.thermoanalytics.com/careersURL = https://tai.hirescore.com/jobX = //h3locationX = //*[contains(concat( " ", @class, " " ), concat( " ", "location", " " ))]company = ThermoAnalytics

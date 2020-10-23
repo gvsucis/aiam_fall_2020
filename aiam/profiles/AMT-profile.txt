@@ -1,1 +1,0 @@
-baseURL = https://appliedmfg.com/careersURL = https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=80863f96-9d3a-484a-b4a3-132678e773cf&ccId=19000101_000001&type=MP&lang=en_USjobX = //*[(@id = "lblTitle")]locationX = //*[contains(concat( " ", @class, " " ), concat( " ", "current-opening-location-item", " " ))]//spancompany = AMT

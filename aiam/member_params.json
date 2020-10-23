@@ -1,10 +1,11 @@
 {
     "members": {
-        "SkilledMFG": {
-            "baseURL": "https://www.skilledmfg.com/",
-            "careersURL": "Https://recruitingbypaycor.com/career/CareerHomeSearch.action?clientId=8a7883d072e8b0dc01730249e7cd0ad6",
-            "jobX": "//div[@class='gnewtonCareerGroupJobTitleClass']/a",
-            "locationX": "//div[@class='gnewtonCareerGroupJobDescriptionClass']"
+        "Premier Thermal": {
+            "baseURL": "https://www.premierthermal.com/",
+            "careersURL": "https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=af16d997-18a9-46a1-ab90-ac4c1fd345ce&ccId=19000101_000001&type=MP&lang=en_US",
+            "jobX": "//span[@class='current-opening-title']",
+            "locationX": "//label[@class='current-opening-location-item']/span",
+            "useDriver": "on"
         }
     }
 }

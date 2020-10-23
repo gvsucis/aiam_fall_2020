@@ -1,1 +1,0 @@
-baseURL = http://depusa.force.comcareersURL = http://depusa.force.com/careers/ts2__JobSearchjobX = //*[(@id = "j_id0\:j_id1\:atsForm\:atsSearchResultsTable\:tb")]//alocationX = company = Depusa

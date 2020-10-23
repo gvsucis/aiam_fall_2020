@@ -1,1 +1,0 @@
-baseURL = https://jobs.gecareers.com/aviation/global/encareersURL = https://jobs.gecareers.com/global/en/search-results?keywords=michiganjobX = //*[contains(concat( " ", @class, " " ), concat( " ", "job-title", " " ))]//spanlocationX = //*[contains(concat( " ", @class, " " ), concat( " ", "job-location", " " ))]company = GE Aviation
