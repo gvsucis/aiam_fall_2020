@@ -3,8 +3,8 @@ from subprocess import Popen, PIPE
 from os import chdir, listdir
 from json import load, dump, loads
 
-MEMBER_PARAMS_FILENAME = '../member_params.json'
-PROFILES_PATHNAME = '../profiles/'
+MEMBER_PARAMS_FILENAME = 'member_params.json'
+PROFILES_PATHNAME = 'profiles/'
 
 app = Flask(__name__)
 
@@ -45,10 +45,10 @@ def load_profiles_into_memberparams( profile ):
 
 
 def scrape():
-	chdir('../')
+	#chdir('../')
 	p = Popen( ['scrapy', 'crawl', 'general' ] )
 	p.wait()
-	chdir('interface')
+	#chdir('interface')
 
       
 @app.route('/process', methods = ['POST'])
@@ -61,7 +61,7 @@ def process():
 	if 'useDriver' not in data:
 		data['useDriver'] = 'off'
 
-	chdir('../')
+	#chdir('../')
 	fname = 'member_params.json'
 	with open( fname ) as j: 
 		params = load( j )
@@ -72,7 +72,7 @@ def process():
 		write_json( params, fname )
 	p = Popen( ['scrapy', 'crawl', 'general' ] )
 	p.wait()
-	chdir('interface')
+	#chdir('interface')
 	return 'success, new profile created'
 
 
@@ -103,7 +103,7 @@ def run_scrapes():
 @app.route('/scrape_profiles')
 def scrape_profiles():
 	scrape_profile_names = []
-	for scrape_profile in listdir('../profiles'):
+	for scrape_profile in listdir(PROFILES_PATHNAME):
 		try:
 				scrape_profile_names.append( scrape_profile.strip('-profile.txt') )
 		except:
@@ -112,7 +112,7 @@ def scrape_profiles():
 
 @app.route('/')
 def hello_world():
-	return render_template('interface.html', scrape_profile_api='http://0.0.0.0:8000/scrape_profiles', profiles=['a','b','c'])
+	return render_template('interface.html', scrape_profile_api='http://localhost:8000/scrape_profiles', profiles=['a','b','c'])
 
 if __name__ == "__main__":
 	app.run( '0.0.0.0', 8000 )
