@@ -12,8 +12,9 @@ from aiam.Models import JobDB, db_connect, create_tables, delete_table
 
 
 class AiamPipeline:
-    def process_item(self, item, spider):
-        return item
+	def process_item(self, item, spider):
+		print("XXX{}".format(item));
+		return item
 
 
 class SetupDBTablesPipeline(object):

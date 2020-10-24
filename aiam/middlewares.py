@@ -4,6 +4,8 @@
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+from subprocess import Popen, PIPE
+from json import dumps
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
@@ -28,13 +30,39 @@ class AiamSpiderMiddleware:
         # Should return None or raise an exception.
         return None
 
+    def post_jobs( self, data ):
+        # get the company name from the firebase json format
+        company_name = ''
+        for key in data.keys():
+            company_name = key # format is { "company": [ jobs here ] }
+            break # company should be the only key, break just in case
+
+        if len( data[company_name].keys() ) > 0:
+            # stringify the data dictionary, needed for travel thru internet
+            jobs = dumps( data, separators=(',', ':') )
+
+            print("XXXXXXXXXXXXxxx{}".format( jobs ))
+            # the firebase target
+            db = 'https://aiam-f9a6da.firebaseio.com/jobs/{}.json'.format( company_name )
+
+            # first delete any existing job data for company
+            p = Popen( ['/usr/bin/curl', '-X', 'DELETE', db], stdout=PIPE )
+            p.wait() # pause for DELETE process
+            # now repost the company with updated job data
+            p = Popen( ['/usr/bin/curl', '-X', 'POST', '-d', jobs, db], stdout=PIPE )
+            p.wait() # pause for POST process
+
     def process_spider_output(self, response, result, spider):
         # Called with the results returned from the Spider, after
         # it has processed the response.
 
-        # Must return an iterable of Request, or item objects.
         for i in result:
+            
+            self.post_jobs( i )
             yield i
+        # Must return an iterable of Request, or item objects.
+        #for i in result:
+        #    yield i
 
     def process_spider_exception(self, response, exception, spider):
         # Called when a spider or process_spider_input() method
