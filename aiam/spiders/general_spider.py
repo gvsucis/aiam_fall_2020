@@ -3,6 +3,7 @@ import json
 import re
 from selenium import webdriver
 from os import name
+from urllib.parse import quote
 
 PARAM_FILE = 'member_params.json'
 
@@ -29,6 +30,10 @@ class Spider_General(scrapy.Spider):
         text = text.strip().strip("\n \t").replace("  ", "").replace("\n", "")
         return text
 
+    def urlencode ( self, url ):
+        ret = quote( url ).replace("%3A",":")
+        return ret
+
     def write_profile(self, scrapeProfile):
         with open('profiles/' + scrapeProfile["company"] + '-profile.json', 'w') as profilef:
             profile = {}
@@ -54,23 +59,20 @@ class Spider_General(scrapy.Spider):
 
         for member in members:
             # populate self variables from the current member subdictionary
-            memberURL = members[member]["careersURL"]
-            self.members[memberURL] = members[member]
-
-            self.members[memberURL]["company"] = member
-            self.members[memberURL]["driver"] = webdriver.Chrome(executable_path=target_chrome_driver)
+            self.members[member] = members[member]
+            # a few of these don't come with the web form, manually add those in
+            self.members[member]["company"] = member
+            self.members[member]["driver"] = webdriver.Chrome(executable_path=target_chrome_driver) # needs instantiation
             if "nextPageX" not in members[member]:
-                self.members[memberURL]["nextPageX"] = ''
+                self.members[member]["nextPageX"] = ''
             # supply scrapy with the data
-            yield scrapy.Request( url=memberURL, callback=self.parse )
+            yield scrapy.Request( url=self.members[member]["careersURL"], callback=self.parse, meta={ "company": member } )
 
 
     def parse(self, response):
-        print("X" *64)
-        print(response.url)
-        print(self.members)
-        profile = self.members[response.url]
+        profile = self.members[ response.meta["company"] ]
         data = { self.company: {} }
+
         self.write_profile(profile)
         driver = profile["driver"]
         company = profile["company"]
@@ -78,6 +80,7 @@ class Spider_General(scrapy.Spider):
         locationX = profile["locationX"]
         jobX = profile["jobX"]
         nextPageX = profile["nextPageX"]
+        careersURL = profile["careersURL"]
 
         f = open('results/' + company + "-jobs.txt", "w")
         print(company + "-jobs.txt")

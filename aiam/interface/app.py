@@ -5,6 +5,8 @@ from json import load, dump, loads
 
 MEMBER_PARAMS_FILENAME = 'member_params.json'
 PROFILES_PATHNAME = 'profiles/'
+SCRAPE_PROFILE_API = 'http://0.0.0.0:8000/scrape_profiles'
+
 
 app = Flask(__name__)
 
@@ -31,18 +33,6 @@ def clear_memberparams():
 		params["members"] = {}
 		temp = params["members"]
 		write_json( params, MEMBER_PARAMS_FILENAME )
-
-'''
-def load_profiles_into_memberparams( profile ):
-	with open( MEMBER_PARAMS_FILENAME ) as f: 
-		params = load( f )
-		#temp = params['members']
-		#params["members"] = {}
-		temp = params["members"]
-		temp[company_name] = data
-		write_json( params, MEMBER_PARAMS_FILENAME )
-'''
-
 
 def scrape():
 	#chdir('../')
@@ -112,7 +102,7 @@ def scrape_profiles():
 
 @app.route('/')
 def hello_world():
-	return render_template('interface.html', scrape_profile_api='http://localhost:8000/scrape_profiles', profiles=['a','b','c'])
+	return render_template('interface.html', scrape_profile_api=SCRAPE_PROFILE_API )
 
 if __name__ == "__main__":
 	app.run( '0.0.0.0', 8000 )
