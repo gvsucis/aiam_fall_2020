@@ -5,6 +5,61 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 </head>
 <body>
+
+	<div hidden="true" style="position:fixed; z-index:100000; width:100%; height:100vh; background-color:rgba(0,0,0,0.8);" id="PopupModal">
+		<div class="container">
+			<div id="ModalBackground0" class="row"><div style="height:20vh;" class="col-lg-12"></div></div>
+			<div class="row">
+				<div id="ModalBackground1" class="col-lg-2"></div>
+
+				<div style="background-color:rgba(255,255,255,1); padding:0px;" class="col-lg-8">
+					
+					<div style="padding:1.5px; margin:0.5px;"class="row">
+						<div class="col-lg-4">
+							<h1> Profile: </h1>
+						</div>
+						<div class="col-lg-8"></div>
+					</div>
+
+					<div style="width:100%; padding:0px; margin:0px; border:1px solid gray"></div>
+
+					<div style="padding:3px; padding-top:0px; margin-right:1px; margin-left:1px;">
+							<table class="table table-dark">
+							  <tbody id="PopupModal_DataSection" >
+							    
+							    <tr id="PopupModal_BaseURL_Section">
+							      <th scope="row"> Base URL </th>
+							      <td id="PopupModal_BaseURL_Value"></td>
+							    </tr>
+
+							    <tr id="PopupModal_CareersURL_Section">
+							      <th scope="row"> Careers URL </th>
+							      <td id="PopupModal_CareersURL_Value"></td>
+							    </tr>
+
+							    <tr id="PopupModal_JobX_Section">
+							      <th scope="row"> Job XPath </th>
+							      <td id="PopupModal_JobX_Value"></td>
+							    </tr>
+
+							    <tr id="PopupModal_LocationX_Section">
+							      <th scope="row"> Location XPath </th>
+							      <td id="PopupModal_LocationX_Value"></td>
+							    </tr>
+							   
+							  </tbody>
+							</table>
+						</div>
+						<button class="btn btn-alert" id="ModalListener">close</button>
+					</div>
+
+				</div>
+
+				<div id="ModalBackground2" class="col-lg-2"></div>
+			</div>
+		</div>
+	</div>
+
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-4"></div>
@@ -15,27 +70,48 @@
 		</div>
 
 		<div class="row">
-
 			<div class="col-md-6">
 				<h3>Create New Scrape Profile</h3>	
 				 <form action="/process" method="POST">
-				 	<label for="company">Company: &emsp;&emsp;</label>
-					<input placeholder='company_name' type="text" id="copmany" name="company"><br><br>
 
-					<label for="baseURL">Base URL: &emsp;&emsp;</label>
-					<input type="text" id="baseURL" name="baseURL"><br><br>
-
-					<label for="careersURL">Careers URL: &emsp;&emsp;</label>
-					<input type="text" id="careersURL" name="careersURL"><br><br>
-
-					<label for="jobX">Job Xpath: &emsp;&emsp;</label>
-					<input type="text" id="jobX" name="jobX"><br><br>
-
-					<label for="locationX">Location Xpath: &emsp;&emsp;</label>
-					<input type="text" id="locationX" name="locationX"><br><br>
-
-					<label for="useDriver">Use Web Driver &emsp;&emsp;</label>
-					<input type="checkbox" id="useDriver" name="useDriver"><br><br>
+				 	<div class="form-group row">
+				 		<label class="col-sm-4 col-form-label" for="company">Company: &emsp;&emsp;</label>
+				 		<div class="col-sm-5">
+				 			<input placeholder='company_name' type="text" id="company" name="company"><br><br>
+				 		</div>
+				 	</div>
+				 	
+					
+				 	<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="baseURL">Base URL: &emsp;&emsp;</label>
+						<div class="col-sm-5">
+							<input type="text" id="baseURL" name="baseURL"><br><br>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="careersURL">Careers URL: &emsp;&emsp;</label>
+						<div class="col-sm-5">
+							<input type="text" id="careersURL" name="careersURL"><br><br>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="jobX">Job Xpath: &emsp;&emsp;</label>
+						<div class="col-sm-5">
+							<input type="text" id="jobX" name="jobX"><br><br>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="locationX">Location Xpath: &emsp;&emsp;</label>
+						<div class="col-sm-5">
+							<input type="text" id="locationX" name="locationX"><br><br>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="useDriver">Use Web Driver &emsp;&emsp;</label>
+						<div class="col-sm-5">
+							<input type="checkbox" id="useDriver" name="useDriver"><br><br>
+						</div>
+					</div>
 
 					<input type="submit" value="Submit">
 				</form> 
@@ -45,7 +121,7 @@
 				<h3>Run Existing Scrape Profile</h3>	
 
 				<form action="/run_scrapes" method="POST">
-					<ul id="scrape-profiles-checklist">					
+					<ul style="height:400px;overflow-y:auto;" id="scrape-profiles-checklist">					
 					</ul>
 					<button id="checkbox-scrape-submit">
 						Scrape Data
@@ -58,11 +134,79 @@
 	</div>
 
 	<script>
+
+		const showModal = async ( name ) => {
+			document.getElementById( 'PopupModal' ).hidden = false;
+			
+			var modal_data = await getProfile( name );
+			populateModal( modal_data );
+		}
+
+		const hideModal = () => {
+			document.getElementById( 'PopupModal' ).hidden = true;
+		} 
+
+		const populateModal = ( profile_data ) => {
+			try
+			{
+				document.getElementById( "PopupModal_BaseURL_Value" ).innerHTML = profile_data['baseURL'];
+				document.getElementById( "PopupModal_CareersURL_Value" ).innerHTML = profile_data['careersURL'];
+				document.getElementById( "PopupModal_JobX_Value" ).innerHTML = profile_data['jobX'];
+				document.getElementById( "PopupModal_LocationX_Value" ).innerHTML = profile_data['locationX'];
+			}
+			catch ( e )
+			{
+				console.log("Error");
+				hideModal();
+			}
+		}
+
+
+		const deleteProfile = async ( element ) => {
+			const data = await fetch( 
+				'{{scrape_api}}',
+				{
+				method:'DELETE',
+				},
+				body=element.id
+
+			)
+			.then( x => {
+				const profileList = document.getElementById('scrape-profiles-checklist');
+				while (profileList.firstChild) { profileList.removeChild(profileList.firstChild);}
+				getScrapeProfiles().then( scrape_profiles => {
+			    	let list = document.getElementById( 'scrape-profiles-checklist' );
+
+			   		for ( profile in scrape_profiles['data'] )
+			   		{
+			   			list.appendChild( createNewCheckbox( scrape_profiles['data'][profile] ) );
+			   		}
+			    });
+			} )
+		}	
+
+		const getProfile = async ( name ) => {
+			const data = await fetch( 
+				'{{get_profile_api}}' + name,
+				{
+				method:'GET',
+				}
+			);
+
+			return await data.json();
+		}			
+
 		const createNewCheckbox = ( p ) => {
 			let newCheckbox = document.createElement( "input" );
 			let newSpan = document.createElement( "span" );
 			let newLineBreak = document.createElement( "br" );
-			let newDiv = document.createElement( "div" );
+			let newOuterDiv = document.createElement( "div" );
+			let newLeftDiv = document.createElement( "div" );
+			let newRightDiv = document.createElement( "div" );
+			let newDeleteImg = document.createElement( "img" );
+			let newDeleteHoverText = document.createElement( "a" );
+			let newEditImg = document.createElement( "img" );
+			let newEditHoverText = document.createElement( "a" );
 
    			newCheckbox.type = "checkbox";
    			newCheckbox.id = p + "checkbox";
@@ -72,16 +216,49 @@
    			p = p.replace( '-profile.json', '' );
    			p = '\t' + p
 
+   			newDeleteHoverText.setAttribute( 'title', 'Delete Profile' );
+   			newEditHoverText.setAttribute( 'title', 'Modify Profile' );
+
+   			newDeleteImg.src = '/static/circle-2x.png'
+   			newDeleteImg.className = newDeleteImg.className +' deletionButton'
+   			newDeleteImg.id = p.replace('\t', '');
+   			newDeleteImg.style = "text-align:right; cursor:pointer;";
+   			newDeleteImg.appendChild( newDeleteHoverText );
+   			newDeleteImg.addEventListener( 'click', ( e ) => {
+   				deleteProfile( newDeleteImg );
+   			} );
+
+   			newEditImg.src = '/static/cog-x.png'
+   			newEditImg.className = 'editButton'
+   			newEditImg.id = p.replace('\t', '');
+   			newEditImg.style = "text-align:right; margin-right:1vw; cursor:pointer;";
+   			newEditImg.setAttribute( 'data-toggle', 'modal' );
+   			newEditImg.setAttribute( 'data-target', '#ModalX' );
+   			newEditImg.appendChild( newEditHoverText );
+   			newEditImg.addEventListener( 'click', ( e ) => {
+   				showModal( p );
+   			} );
+
+   			newSpan.appendChild( newCheckbox );
    			newSpan.appendChild( document.createTextNode( p ) );
 
-   			newDiv.appendChild( newCheckbox );
-   			newDiv.appendChild( newSpan );
-   			return newDiv;
+   			newOuterDiv.className = "row";
+   			newOuterDiv.style = "margin:0.1vw; padding:0.1vw; padding-top:0.4vw; padding-bottom:0.4vw; border:0.5px solid gray;";
+   			newLeftDiv.className = "col-md-9";
+   			newRightDiv.className = "col-md-3";
+
+   			newLeftDiv.appendChild( newSpan );
+   			newRightDiv.appendChild( newEditImg );
+   			newRightDiv.appendChild( newDeleteImg );
+
+   			newOuterDiv.appendChild( newLeftDiv );
+   			newOuterDiv.appendChild( newRightDiv );
+   			return newOuterDiv;
 		}
 
 		const getScrapeProfiles = async () => {
 	      console.log("Grabbing scrape profiles");
-	      const data = await fetch( '{{scrape_profile_api}}' );
+	      const data = await fetch( '{{scrape_api}}' );
 	      return await data.json();
 	    };
 
@@ -115,6 +292,18 @@
 	    document.getElementById( 'checkbox-scrape-submit' ).addEventListener('click', ()=>{
 	    	console.log( getCheckedScrapeProfiles() );
 	    })
+
+	    document.getElementById( 'ModalListener' ).addEventListener( 'click', () => {
+	    	hideModal();
+	    } );
+
+	    for (var i=0; i<3; ++i)
+	    {
+	    	document.getElementById( 'ModalBackground' + i.toString() ).addEventListener( 'click', () => {
+	    		hideModal();
+	    	} )
+	    }
+
 	</script>
 
 </body>

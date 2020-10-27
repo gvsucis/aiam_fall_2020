@@ -1,10 +1,14 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from subprocess import Popen, PIPE
 from os import chdir, listdir
 from json import load, dump, loads
 
 MEMBER_PARAMS_FILENAME = '../member_params.json'
-PROFILES_PATHNAME = '../profiles/'
+PROFILES_PATH = '../profiles/'
+
+PORT=9001
+GET_PROFILE_API = 'http://0.0.0.0:{}/scrape_profile/'.format(PORT)
+SCRAPE_API = 'http://0.0.0.0:{}/scrape_profiles'.format(PORT)
 
 app = Flask(__name__)
 
@@ -32,17 +36,6 @@ def clear_memberparams():
 		temp = params["members"]
 		write_json( params, MEMBER_PARAMS_FILENAME )
 
-'''
-def load_profiles_into_memberparams( profile ):
-	with open( MEMBER_PARAMS_FILENAME ) as f: 
-		params = load( f )
-		#temp = params['members']
-		#params["members"] = {}
-		temp = params["members"]
-		temp[company_name] = data
-		write_json( params, MEMBER_PARAMS_FILENAME )
-'''
-
 
 def scrape():
 	chdir('../')
@@ -50,6 +43,18 @@ def scrape():
 	p.wait()
 	chdir('interface')
 
+
+def get_profiles():
+	return listdir( PROFILES_PATH )
+
+
+def get_profile_data ( name ):
+	with open('{}/{}-profile.json'.format( PROFILES_PATH, name ), 'r' ) as f:
+		profile_data = loads( f.read() )
+		return profile_data
+
+
+''' ROUTES '''
       
 @app.route('/process', methods = ['POST'])
 def process():
@@ -100,8 +105,12 @@ def run_scrapes():
 	return 'success'
 
 
-@app.route('/scrape_profiles')
+@app.route('/scrape_profiles', methods = ['GET', 'DELETE'])
 def scrape_profiles():
+
+	if request.method == 'DELETE':
+		print( request.data )
+
 	scrape_profile_names = []
 	for scrape_profile in listdir('../profiles'):
 		try:
@@ -110,9 +119,18 @@ def scrape_profiles():
 			continue
 	return {'data':scrape_profile_names}
 
+
+''' Get a single profile's infomation '''
+@app.route ( '/scrape_profile/<name>' )
+def scrape_profile ( name ):	
+	profile = get_profile_data( name )
+	print(profile)
+	return profile
+
+
 @app.route('/')
-def hello_world():
-	return render_template('interface.html', scrape_profile_api='http://0.0.0.0:8000/scrape_profiles', profiles=['a','b','c'])
+def index():
+	return render_template( 'interface.html', get_profile_api=GET_PROFILE_API, scrape_api=SCRAPE_API )
 
 if __name__ == "__main__":
-	app.run( '0.0.0.0', 8000 )
+	app.run( '0.0.0.0', PORT )
