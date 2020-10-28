@@ -42,6 +42,7 @@ class ScrapySpiderPipeline(object):
         """
         This method is called for every item pipeline component.
         """
+        print(item["job"])
         session = self.Session()
         q = session.query(JobDB).filter(
             JobDB.job == item["job"] and JobDB.location == item["location"] and JobDB.company == item["company"])
@@ -51,7 +52,6 @@ class ScrapySpiderPipeline(object):
             jobdb.location = item["location"]
             jobdb.jobURL = item["jobURL"]
             jobdb.company = item['company']
-
             try:
                 session.add(jobdb)
                 session.commit()

@@ -67,12 +67,13 @@ class Spider_General(scrapy.Spider):
             if "nextPageX" not in members[member]:
                 self.members[member]["nextPageX"] = ''
             # supply scrapy with the data
+            AddCompany(self.members[member])
             yield scrapy.Request( url=self.members[member]["careersURL"], callback=self.parse, meta={ "company": member } )
 
 
     def parse(self, response):
         profile = self.members[ response.meta["company"] ]
-        data = { self.company: {} }
+        data = { self.company: {}}
 
         self.write_profile(profile)
         driver = profile["driver"]
@@ -86,7 +87,7 @@ class Spider_General(scrapy.Spider):
         f = open('results/' + company + "-jobs.txt", "w")
         print(company + "-jobs.txt")
         # scrape with selenium
-        if profile["useDriver"] == 'on':
+        if useDriver == 'on':
 
             #print("\n\n\nHIT!\n\n\n")
 

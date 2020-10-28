@@ -47,13 +47,13 @@ class AddCompany():
         self.Session = sessionmaker(bind=engine)
         session = self.Session()
         create_tables(engine)
-        q = session.query(CompanyDB).filter(CompanyDB.company == spider.company)
+        q = session.query(CompanyDB).filter(CompanyDB.company == spider["company"])
         # add the company record if it doesn't already exist
         if (not session.query(literal(True)).filter(q.exists()).scalar()):
             coDB = CompanyDB()
-            coDB.company = spider.company
-            coDB.companyURL = spider.baseURL
-            coDB.jobsURL = spider.careersURL
+            coDB.company = spider["company"]
+            coDB.companyURL = spider["baseURL"]
+            coDB.jobsURL = spider["careersURL"]
             try:
                 session.add(coDB)
                 session.commit()
