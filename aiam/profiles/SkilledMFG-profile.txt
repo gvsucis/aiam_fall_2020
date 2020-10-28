@@ -1,1 +1,0 @@
-baseURL = https://www.skilledmfg.com/careersURL = Https://recruitingbypaycor.com/career/CareerHomeSearch.action?clientId=8a7883d072e8b0dc01730249e7cd0ad6jobX = //div[@class='gnewtonCareerGroupJobTitleClass']/alocationX = //div[@class='gnewtonCareerGroupJobDescriptionClass']company = SkilledMFG

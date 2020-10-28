@@ -5,6 +5,24 @@
             "careersURL": "https://www.novastar.net/careers/",
             "jobX": "//span[@class='tb_title_accordion']",
             "locationX": "",
+            "useDriver": "on",
+            "newPageX": "",
+            "nextPageX": ""
+        },
+        "Premier Thermal": {
+            "baseURL": "https://www.premierthermal.com/",
+            "careersURL": "https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=af16d997-18a9-46a1-ab90-ac4c1fd345ce&ccId=19000101_000001&type=MP&lang=en_US",
+            "jobX": "//span[@class='current-opening-title']",
+            "locationX": "//label[@class='current-opening-location-item']/span",
+            "useDriver": "on",
+            "nextPageX": ""
+        },
+        "JR Automation": {
+            "baseURL": "https://www.jrautomation.com/careers",
+            "careersURL": "https://www.jrautomation.com/careers/jobs#/?regions=michigan",
+            "jobX": "//div[@class='result ng-scope']/a/span[@class='title ng-binding']",
+            "locationX": "//span[@class='secondary ng-binding']",
+            "nextPageX": "//button[@class='page'][2]",
             "useDriver": "on"
         }
     }
