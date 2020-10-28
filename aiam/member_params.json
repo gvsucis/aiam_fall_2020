@@ -1,5 +1,21 @@
 {
     "members": {
+        "Cooling Tech Group": {
+            "baseURL": "https://www.toolingtechgroup.com",
+            "careersURL": "https://www.toolingtechgroup.com/careers/",
+            "jobX": "//*/div[2]/div/div/div/div[2]/div[2]/div/div/div[1]/div/h3/a",
+            "locationX": "",
+            "useDriver": "off",
+            "nextPageX": ""
+        },
+        "JR Automation": {
+            "baseURL": "https://www.jrautomation.com/careers",
+            "careersURL": "https://www.jrautomation.com/careers/jobs#/?regions=michigan",
+            "jobX": "//div[@class='result ng-scope']/a/span[@class='title ng-binding']",
+            "locationX": "//span[@class='secondary ng-binding']",
+            "nextPageX": "//button[@class='page'][2]",
+            "useDriver": "on"
+        },
         "NovaStar": {
             "baseURL": "https://www.novastar.net/careers/",
             "careersURL": "https://www.novastar.net/careers/",
@@ -16,14 +32,6 @@
             "locationX": "//label[@class='current-opening-location-item']/span",
             "useDriver": "on",
             "nextPageX": ""
-        },
-        "JR Automation": {
-            "baseURL": "https://www.jrautomation.com/careers",
-            "careersURL": "https://www.jrautomation.com/careers/jobs#/?regions=michigan",
-            "jobX": "//div[@class='result ng-scope']/a/span[@class='title ng-binding']",
-            "locationX": "//span[@class='secondary ng-binding']",
-            "nextPageX": "//button[@class='page'][2]",
-            "useDriver": "on"
         }
     }
 }

@@ -38,26 +38,35 @@ class ScrapySpiderPipeline(object):
         if not engine.dialect.has_table(engine, "job_table"):
             create_tables(engine)
 
-    def process_item(self, item, spider):
+    def process_item(self, items, spider):
         """
         This method is called for every item pipeline component.
         """
-        print(item["job"])
-        session = self.Session()
-        q = session.query(JobDB).filter(
-            JobDB.job == item["job"] and JobDB.location == item["location"] and JobDB.company == item["company"])
-        if (not session.query(literal(True)).filter(q.exists()).scalar()):
-            jobdb = JobDB()
-            jobdb.job = item["job"]
-            jobdb.location = item["location"]
-            jobdb.jobURL = item["jobURL"]
-            jobdb.company = item['company']
-            try:
-                session.add(jobdb)
-                session.commit()
-            except:
-                session.rollback()
-                raise
-            finally:
-                session.close()
-        return item
+        #allJobs = []
+        for key, item in items.items():
+            session = self.Session()
+            q = session.query(JobDB).filter(
+                JobDB.job == item["job"] and JobDB.location == item["location"] and JobDB.company == item["company"])
+            if (not session.query(literal(True)).filter(q.exists()).scalar()):
+                jobdb = JobDB()
+                jobdb.job = item["job"]
+                jobdb.location = item["location"]
+                jobdb.jobURL = item["jobURL"]
+                jobdb.company = item['company']
+                #allJobs.append(jobdb)
+                #session.close()
+                try:
+                    ##session.bulk_save_objects(allJobs)
+                    session.add(jobdb)
+                    session.commit()
+                except:
+                    session.rollback()
+                    raise
+                finally:
+                    session.close()
+
+        #session = self.Session()
+
+
+
+        return items

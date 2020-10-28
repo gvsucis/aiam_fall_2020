@@ -5,7 +5,7 @@ from json import load, dump, loads
 
 MEMBER_PARAMS_FILENAME = 'member_params.json'
 PROFILES_PATHNAME = 'profiles/'
-SCRAPE_PROFILE_API = 'http://0.0.0.0:8000/scrape_profiles'
+SCRAPE_PROFILE_API = 'http://localhost:8000/scrape_profiles'
 
 
 app = Flask(__name__)
@@ -72,11 +72,11 @@ def run_scrapes():
 	clear_memberparams()
 
 	params = {"members":{}}
-	print(params)
+	#print(params)
 	for member_profile_file in data:
 		profile = get_profile( PROFILES_PATHNAME + member_profile_file )
-		print(type(profile))
-		print("HI")
+		#print(type(profile))
+		#print("HI")
 		if type(profile) == dict:
 			company_name = profile.pop('company') 
 			params['members'][company_name] = profile
@@ -105,4 +105,4 @@ def hello_world():
 	return render_template('interface.html', scrape_profile_api=SCRAPE_PROFILE_API )
 
 if __name__ == "__main__":
-	app.run( '0.0.0.0', 8000 )
+	app.run( 'localhost', 8000 )

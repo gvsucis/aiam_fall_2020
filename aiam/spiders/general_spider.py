@@ -14,17 +14,6 @@ class Spider_General(scrapy.Spider):
     def __init__(self):
         self.members = {}
         super().__init__()
-        self.company = ''
-        self.baseURL = ''
-        self.careersURL = ''
-        self.jobsListX = ''
-        self.jobX = ''
-        self.locationX = ''
-        self.jobURLX = ''
-        self.jobURLAttr = ''
-        self.driver = None
-        self.useDriver = 'on'
-        self.nextPageX = ''
 
 
     def cleanup(self, text):
@@ -52,7 +41,7 @@ class Spider_General(scrapy.Spider):
         if name == 'nt':
             target_chrome_driver = './ChromeDrivers/chromedriver.exe'
 
-        print("HIT")
+        #print("HIT")
 
         # parse json file into dictionary
         with open( PARAM_FILE, 'r' ) as f:
@@ -73,7 +62,7 @@ class Spider_General(scrapy.Spider):
 
     def parse(self, response):
         profile = self.members[ response.meta["company"] ]
-        data = { self.company: {}}
+        data = {}
 
         self.write_profile(profile)
         driver = profile["driver"]
@@ -85,7 +74,8 @@ class Spider_General(scrapy.Spider):
         careersURL = profile["careersURL"]
 
         f = open('results/' + company + "-jobs.txt", "w")
-        print(company + "-jobs.txt")
+        #print(company + "-jobs.txt")
+        jobNum = 0
         # scrape with selenium
         if useDriver == 'on':
 
@@ -103,11 +93,15 @@ class Spider_General(scrapy.Spider):
                     for job, location in zip(jobs,locations):
                         result = self.cleanup(job.text)
                         result_location = self.cleanup(location.text)
+                        data[jobNum] = {"job": result, "location":result_location, "jobURL":"", "company":company}
+                        jobNum += 1
                         f.write(result + ' - ' + result_location + '\n' )
                 # no locations provided, only jobs
                 else:
                     for job in jobs:
                         result = self.cleanup(job.text)
+                        data[jobNum] = {"job": result, "location": "Local", "jobURL": "", "company": company}
+                        jobNum += 1
                         f.write(result + ' -- ' + 'Local' + '\n' )
 
                 # Scrape additional pages if provided
@@ -134,12 +128,15 @@ class Spider_General(scrapy.Spider):
                 for job, location in zip(jobs,locations):
                     result = self.cleanup(job.get())
                     result_location = self.cleanup(location.get())
-
+                    data[jobNum] = {"job": result, "location": result_location, "jobURL": "", "company": company}
+                    jobNum += 1
                     f.write(result + ' - ' + result_location + '\n' )
             # no locations provided, only jobs
             else:
                 for job in jobs:
                     result = self.cleanup(job.get())
+                    data[jobNum] = {"job": result, "location": "Local", "jobURL": "", "company": company}
+                    jobNum += 1
                     f.write(result + ' -- ' + 'Local' + '\n' )
             yield data
         f.close()
