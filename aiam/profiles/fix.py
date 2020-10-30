@@ -1,8 +1,17 @@
 import os
 import json
 
-with open( 'Cooling Tech Group-profile.json') as f:
-	print( json.loads( json.load(f) )['company'] )
+for file in os.listdir():
+	if 'json' in file:
+		x = {}
+		try:
+			with open( file, 'r' ) as f:
+				x = json.loads( json.load(f) )
+				x = json.loads(x)
+			with open( file, 'w' ) as f:
+				f.write( json.dumps(x) )
+		except:
+			continue
 
 exit(0)
 
