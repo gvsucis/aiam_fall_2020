@@ -55,6 +55,8 @@ class Spider_General(scrapy.Spider):
             self.members[member]["driver"] = webdriver.Chrome(executable_path=target_chrome_driver) # needs instantiation
             if "nextPageX" not in members[member]:
                 self.members[member]["nextPageX"] = ''
+            if "useDriver" not in members[member]:
+                self.members[member]["useDriver"] = "on"
             # supply scrapy with the data
             AddCompany(self.members[member])
             yield scrapy.Request( url=self.members[member]["careersURL"], callback=self.parse, meta={ "company": member } )

@@ -28,7 +28,7 @@ class JobDB(DeclarativeBase):
     #job location and company uniquely ID a job
     job = Column('job', String(200), primary_key=True)
     location = Column('location', String(200), primary_key=True)
-    jobURL = Column('jobURL', String(200))
+    jobURL = Column('jobURL', String(400))
     company = Column('company', String(200), primary_key=True)
 
 
@@ -37,7 +37,7 @@ class CompanyDB(DeclarativeBase):
 
     company = Column('company', String(200), primary_key=True)
     companyURL = Column('companyURL', String(200))
-    jobsURL = Column('jobsURL', String(200))
+    jobsURL = Column('jobsURL', String(400))
 
 
 
