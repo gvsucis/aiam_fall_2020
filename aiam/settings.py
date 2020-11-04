@@ -54,9 +54,9 @@ CONNECTION_STRING = "{drivername}://{user}:{passwd}@{host}:{port}/{db_name}?char
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-SPIDER_MIDDLEWARES = {
-    'aiam.middlewares.AiamSpiderMiddleware': 543,
-}
+#SPIDER_MIDDLEWARES = {
+#    'aiam.middlewares.AiamSpiderMiddleware': 543,
+#}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
@@ -72,15 +72,15 @@ SPIDER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
+#ITEM_PIPELINES = {
     # data cleaning TBD
-    'aiam.pipelines.AiamPipeline': 300,
+#    'aiam.pipelines.AiamPipeline': 300,
     # create tables if necessary
-    'aiam.pipelines.SetupDBTablesPipeline': 400,
+#    'aiam.pipelines.SetupDBTablesPipeline': 400,
     #add jobs if necessary
-    'aiam.pipelines.ScrapySpiderPipeline': 600,
+#    'aiam.pipelines.ScrapySpiderPipeline': 600,
     # FIXME update tables
-}
+#}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
