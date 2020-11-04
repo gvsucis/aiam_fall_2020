@@ -29,9 +29,12 @@ class Spider_General(scrapy.Spider):
         s = s.replace(",", "")
         s = re.sub(r'[0-9]+', '', s)
         array = s.split(" ")
+
         for word in array:
-            if word in self.valid_states:
-                print(word)
+            if word.upper() in self.valid_states:
+                print("SUPPOSED TO PRINT HERE: {}".format(word))
+                if word.upper() != "MI" and word.upper() != "MICHIGAN":
+                    return None
         return location
 
     def urlencode ( self, url ):
@@ -116,6 +119,8 @@ class Spider_General(scrapy.Spider):
                         result = self.cleanup(job.text)
                         #calls the validate function
                         result_location = self.validate_location(self.cleanup(location.text))
+                        if result_location == None:
+                            continue
                         data[jobNum] = {"job": result, "location":result_location, "jobURL":"", "company":company}
                         jobNum += 1
                         f.write(result + ' - ' + result_location + '\n' )
@@ -152,6 +157,8 @@ class Spider_General(scrapy.Spider):
                     result = self.cleanup(job.get())
                     #calling validate locations 
                     result_location = self.validate_location(self.cleanup(location.get()))
+                    if result_location == None:
+                        continue
                     data[jobNum] = {"job": result, "location": result_location, "jobURL": "", "company": company}
                     jobNum += 1
                     f.write(result + ' - ' + result_location + '\n' )

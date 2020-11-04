@@ -1,12 +1,10 @@
 {
     "members": {
-        "GE Aviation": {
-            "baseURL": "https://jobs.gecareers.com/aviation/global/en",
-            "careersURL": "https://jobs.gecareers.com/global/en/search-results?keywords=michigan",
-            "jobX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"job-title\", \" \" ))]//span",
-            "locationX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"job-location\", \" \" ))]",
-            "nextPageX": "",
-            "useDriver": "on"
+        "Woodward": {
+            "baseURL": "https://www.woodward.com/home",
+            "careersURL": "https://woodward.taleo.net/careersection/2/jobsearch.ftl?lang=enjobListX = ",
+            "jobX": "//*/th/div/div/span/a",
+            "locationX": "//*/td[2]/div/div/spanjobURLX = jobURLAttr = "
         }
     }
 }
