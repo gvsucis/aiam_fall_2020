@@ -1,7 +1,0 @@
-{
-	"baseURL": "http://depusa.force.com",
-	"careersURL": "http://depusa.force.com/careers/ts2__JobSearch", 
-	"jobX": "//*[(@id = 'j_id0\\\\j_id1\\\\:atsForm\\\\atsSearchResultsTable\\\\tb')]//a", 
-	"locationX": "", 
-	"company": "Depusa"
-}
