@@ -1,10 +1,11 @@
 import scrapy
 import json
-from aiam.Models import AddCompany
 import re
 from selenium import webdriver
 from os import name
 from urllib.parse import quote
+
+from aiam.Models import addCompany
 
 PARAM_FILE = 'member_params.json'
 
@@ -58,7 +59,7 @@ class Spider_General(scrapy.Spider):
             if "useDriver" not in members[member]:
                 self.members[member]["useDriver"] = "on"
             # supply scrapy with the data
-            AddCompany(self.members[member])
+            addCompany(self.members[member])
             yield scrapy.Request( url=self.members[member]["careersURL"], callback=self.parse, meta={ "company": member } )
 
 
@@ -95,6 +96,8 @@ class Spider_General(scrapy.Spider):
                     for job, location in zip(jobs,locations):
                         result = self.cleanup(job.text)
                         result_location = self.cleanup(location.text)
+                        if str(result_location) == "":
+                            result_location = "Local"
                         data[jobNum] = {"job": result, "location":result_location, "jobURL":"", "company":company}
                         jobNum += 1
                         f.write(result + ' - ' + result_location + '\n' )
