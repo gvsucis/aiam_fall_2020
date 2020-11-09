@@ -75,6 +75,7 @@ SPIDER_MIDDLEWARES = {
 ITEM_PIPELINES = {
     # data cleaning TBD
     'aiam.pipelines.AiamPipeline': 300,
+    'aiam.pipelines.DropJobTablePipeline': 350,
     # create tables if necessary
     'aiam.pipelines.SetupDBTablesPipeline': 400,
     #add jobs if necessary
