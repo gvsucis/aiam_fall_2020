@@ -1,1 +1,1 @@
-{"baseURL": "https://www.gsengineering.com/", "careersURL": "https://www.gsengineering.com/careers", "jobX": "//p", "locationX": "//p", "company": "GS Engineering", "nextPageX": "", "useDriver": "on"}
+{"baseURL": "https://www.gsengineering.com/", "careersURL": "https://www.gsengineering.com/careers", "jobX": "//div[@class='views-field views-field-title']/h2[@class='field-content']/a", "locationX": "", "nextPageX": "", "useDriver": "on", "company": "GS Engineering"}
