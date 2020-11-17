@@ -25,11 +25,15 @@ class Spider_General(scrapy.Spider):
         return text
     
     def validate_location(self, location):
+        print("Start of validate location...")
         s = location
         s = s.replace(",", "")
         s = re.sub(r'[0-9]+', '', s)
+        
         array = s.split(" ")
-
+        print("HIT")
+        print(array)
+        print(s)
         for word in array:
             if word.upper() in self.valid_states:
                 print("SUPPOSED TO PRINT HERE: {}".format(word))
@@ -78,7 +82,7 @@ class Spider_General(scrapy.Spider):
             if "nextPageX" not in members[member]:
                 self.members[member]["nextPageX"] = ''
             if "useDriver" not in members[member]:
-                self.members[member]["useDriver"] = "on"
+                self.members[member]["useDriver"] = True
             # supply scrapy with the data
             ###############AddCompany(self.members[member])
             yield scrapy.Request( url=self.members[member]["careersURL"], callback=self.parse, meta={ "company": member } )
@@ -99,10 +103,11 @@ class Spider_General(scrapy.Spider):
         careersURL = profile["careersURL"]
 
         f = open('results/' + company + "-jobs.txt", "w")
+
         #print(company + "-jobs.txt")
         jobNum = 0
         # scrape with selenium
-        if useDriver == 'on':
+        if useDriver == True:
 
             #print("\n\n\nHIT!\n\n\n")
 
@@ -113,6 +118,7 @@ class Spider_General(scrapy.Spider):
             while working:
                 jobs = driver.find_elements_by_xpath(jobX)
                 # location provided
+                print("Our print statement")
                 if len(locationX) > 0:
                     locations = driver.find_elements_by_xpath(locationX )
                     for job, location in zip(jobs, locations):

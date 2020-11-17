@@ -1,10 +1,12 @@
 {
     "members": {
-        "Woodward": {
-            "baseURL": "https://www.woodward.com/home",
-            "careersURL": "https://woodward.taleo.net/careersection/2/jobsearch.ftl?lang=enjobListX = ",
-            "jobX": "//*/th/div/div/span/a",
-            "locationX": "//*/td[2]/div/div/spanjobURLX = jobURLAttr = "
+        "AMT": {
+            "baseURL": "https://appliedmfg.com/",
+            "careersURL": "https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=80863f96-9d3a-484a-b4a3-132678e773cf&ccId=19000101_000001&type=MP&lang=en_US",
+            "jobX": "//*[(@id = \"lblTitle\")]",
+            "locationX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"current-opening-location-item\", \" \" ))]//span",
+            "nextPageX": "",
+            "useDriver": true
         }
     }
 }

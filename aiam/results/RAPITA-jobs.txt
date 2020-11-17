@@ -1,1 +1,2 @@
-Was not able to grab information for this website...
+jobxpath: //*[(@id = "vtable")]//a
+locationxpath: //td[contains(concat( " ", @class, " " ), concat( " ", "views-field-field-vacancy-location", " " ))]

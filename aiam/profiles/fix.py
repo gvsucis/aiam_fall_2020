@@ -6,8 +6,9 @@ for file in os.listdir():
 		x = {}
 		try:
 			with open( file, 'r' ) as f:
-				x = json.loads( json.load(f) )
-				x = json.loads(x)
+				x = json.load(f)
+				x["useDriver"] = True
+				
 			with open( file, 'w' ) as f:
 				f.write( json.dumps(x) )
 		except:

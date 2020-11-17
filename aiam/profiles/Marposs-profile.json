@@ -1,1 +1,1 @@
-{"baseURL": "https://www.marposs.com/", "careersURL": "https://www.marposs.com/eng/careers", "jobX": "//*[@id=\"container\"]/main/section[2]/div/div/div/div[3]/div/ul/li", "locationX": "", "company": "Marposs"}
+{"baseURL": "https://www.marposs.com/", "careersURL": "https://www.marposs.com/eng/careers", "jobX": "//*[@id=\"container\"]/main/section[2]/div/div/div/div[3]/div/ul/li", "locationX": "", "company": "Marposs", "useDriver": true}
