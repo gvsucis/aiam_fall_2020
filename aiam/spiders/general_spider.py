@@ -54,7 +54,14 @@ class Spider_General(scrapy.Spider):
                 else:
                     profile[ key ] = scrapeProfile[ key ]
             json.dump( profile, profilef )
-
+    
+    def balance_lists(self, joblist, defaultlocation="local", defaultlink="", locationlist=None, linklist=None):
+        n = len(joblist)
+        if locationlist == None or len(locationlist) < n:
+            locationlist = [defaultlocation for i in range(n)]
+        if linklist == None or len(linklist) < n:
+            linklist = [defaultlink for i in range(n)]
+        return zip(joblist, locationlist, linklist)
 
     def start_requests(self):     
         target_chrome_driver = './ChromeDrivers/linux_chromedriver'
@@ -78,11 +85,15 @@ class Spider_General(scrapy.Spider):
             self.members[member] = members[member]
             # a few of these don't come with the web form, manually add those in
             self.members[member]["company"] = member
-            self.members[member]["driver"] = webdriver.Chrome(executable_path=target_chrome_driver) # needs instantiation
+            options = webdriver.ChromeOptions()
+            options.add_argument("--headless")
+            self.members[member]["driver"] = webdriver.Chrome(executable_path=target_chrome_driver,chrome_options=options) # needs instantiation
             if "nextPageX" not in members[member]:
                 self.members[member]["nextPageX"] = ''
             if "useDriver" not in members[member]:
                 self.members[member]["useDriver"] = True
+            if "defaultLocation" not in members[member]:
+                self.members[member]["defaultLocation"] = 'Local'
             # supply scrapy with the data
             ###############AddCompany(self.members[member])
             yield scrapy.Request( url=self.members[member]["careersURL"], callback=self.parse, meta={ "company": member } )
@@ -98,6 +109,9 @@ class Spider_General(scrapy.Spider):
         company = profile["company"]
         useDriver = profile["useDriver"]
         locationX = profile["locationX"]
+
+        defaultLocation = profile["defaultLocation"]
+
         jobX = profile["jobX"]
         nextPageX = profile["nextPageX"]
         careersURL = profile["careersURL"]
@@ -117,26 +131,27 @@ class Spider_General(scrapy.Spider):
             working = True
             while working:
                 jobs = driver.find_elements_by_xpath(jobX)
-                # location provided
-                print("Our print statement")
-                if len(locationX) > 0:
-                    locations = driver.find_elements_by_xpath(locationX )
-                    for job, location in zip(jobs, locations):
-                        result = self.cleanup(job.text)
-                        #calls the validate function
+                print("This is the length of jobs----------------------------------------")
+                print(len(jobs))
+                locations = driver.find_elements_by_xpath(locationX )
+                l = self.balance_lists(jobs, locationlist=locations, defaultlocation=defaultLocation)
+                
+                for job, location, link in l:
+                    result = self.cleanup(job.text)
+
+                    print("THIS IS THE RESULT")
+                    print(result)
+                    print("This is ENNNNDDDDD of result")
+                    #calls the validate function
+                    result_location = location
+                    try:
                         result_location = self.validate_location(self.cleanup(location.text))
-                        if result_location == None:
-                            continue
-                        data[jobNum] = {"job": result, "location":result_location, "jobURL":"", "company":company}
-                        jobNum += 1
-                        f.write(result + ' - ' + result_location + '\n' )
-                # no locations provided, only jobs
-                else:
-                    for job in jobs:
-                        result = self.cleanup(job.text)
-                        data[jobNum] = {"job": result, "location": "Local", "jobURL": "", "company": company}
-                        jobNum += 1
-                        f.write(result + ' -- ' + 'Local' + '\n' )
+                    except:
+                        result_location = location
+
+                    data[jobNum] = {"job": result, "location":result_location, "jobURL":"", "company":company}
+                    jobNum += 1
+                    f.write(result + ' - ' + result_location + '\n' )
 
                 # Scrape additional pages if provided
                 if (len(nextPageX)) > 0:
