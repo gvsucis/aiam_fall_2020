@@ -1,0 +1,44 @@
+4670 - Material Planner II - York
+4674 - Logistics Anst II - York
+4667 - Eng Prin - Systems - Stafford
+4321 - EE Component Design Release Engineer - Auburn Hills
+1116-1 Liaison Engineer - Propulsion System Duty Cycle - Auburn Hills
+2517 - Powertrain Software Engineer - Auburn Hills
+4654 - Piping Designer - Kingsport
+0239 - Electrical Root Cause and Launch Support Engineer - Auburn Hills
+2912 - Electrical Engineer - Dundee
+2916 - Mechanical Engineer - Dundee
+3195 - Validation Engineer - Auburn Hills
+9908 - Controls Specialist - Detroit
+64270 - Powertrain Durability Engineer - Auburn Hills
+5310 - Electrical Systems Requirements Engineer - Auburn Hills
+7895 - Connected Services Enterprise Architect - SR PSP - Auburn Hills
+2808-1 - .NET Developer - Pittsburgh
+4585 - Systems Engineer - Phoenix
+4583 - Systems Engineer - Sterling Heights
+4586 - Sr. Systems Engineer - Phoenix
+4940 - Senior Connected Services Software Integration Engineer - Auburn Hills
+4977 - Connected Services Feature Owner - Auburn Hills
+4963 - Senior Connected Services Enterprise Architect - Auburn Hills
+4568 - Packaging Engineer Analysis - York
+4569 - Engineer Sr. Test - San Jose
+0923 - Dimensional Engineer - Auburn Hills
+0922-3 Specialist Engineer - Auburn Hills
+0922-4Designer (Technician Level) - Auburn Hills
+0922-1 Technical Leader - Auburn Hills
+0922-2 - Project Leader - Auburn Hills
+7025 User Interface Design Engineer - Auburn Hills
+0422 Senior EmbeddedControl Engineer - Troy
+0419 EE/Core Software Development - Auburn Hills
+4512 Quality Engineer - Sterling Heights
+4506 Quality Engineer - York
+0817 Vehicle Interior Trim Design Engineer - Troy
+0508 NVH Test Engineer - Troy
+0508 Occupant Safety Engineer - Troy
+0508 Durability CAE Engineer - Troy
+0508 NVH CAE Engineer - Troy
+4009 Project Engineer - Minneapolis
+4124 Facilities Engineer - York
+4508 Instrument Cluster Software Modeling Engineer - Auburn Hills
+3198 Service & Parts - Service Engineer - Warren
+Powertrain Designer - Troy,MI

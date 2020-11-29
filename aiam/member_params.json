@@ -1,12 +1,13 @@
 {
     "members": {
-        "Uhy-US": {
-            "baseURL": "https://uhy-us.com/",
-            "careersURL": "https://careers-uhy-us.icims.com/jobs/search?in_iframe=1",
-            "jobX": "//div[@class='col-xs-12 title']/a/span[2]",
-            "locationX": "//div[@class='col-xs-6 header left']/span[2]",
+        "GE Aviation": {
+            "baseURL": "https://www.geaviation.com",
+            "careersURL": "https://jobs.gecareers.com/aviation/global/en/search-results?keywords=michigan",
+            "jobX": "/div[@class='job-title']/span",
+            "locationX": "//span[@class='job-location']",
+            "defaultLocation": "",
             "nextPageX": "",
-            "useDriver": "off"
+            "useDriver": "true"
         }
     }
 }
