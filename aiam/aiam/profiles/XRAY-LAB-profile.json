@@ -1,0 +1,1 @@
+{"company": "XRAY-LAB", "baseURL": "https://xray-lab.com/us/", "careersURL": "https://xray-lab.com/us/company/career/", "jobX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"grve-box-title\", \" \" ))]//span", "locationX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"grve-box-content\", \" \" ))]//p", "nextPageX": "", "useDriver": true}

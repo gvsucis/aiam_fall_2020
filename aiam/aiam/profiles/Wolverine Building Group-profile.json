@@ -1,0 +1,1 @@
+{"baseURL": "https://wolvgroup.com/", "careersURL": "https://wolvgroup.com/careers/", "jobX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"offset-lg-1\", \" \" ))]//li", "locationX": "", "nextPageX": "", "useDriver": "on", "company": "Wolverine Building Group"}
