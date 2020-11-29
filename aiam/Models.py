@@ -77,12 +77,13 @@ def addCompany(spider):
     coDB.jobX = spider["jobX"]
     coDB.locationX = spider["locationX"]
     coDB.nextPageX = spider["nextPageX"]
-    coDB.useDriver = spider["useDriver"] == "on"
+    coDB.useDriver = spider["useDriver"]
     if "defaultLocation" in spider:
         coDB.defaultLocation = spider["defaultLocation"]
     if coDB != q:
         try:
-            session.delete(q)
+            if q != None:
+                session.delete(q)
             session.add(coDB)
             session.commit()
         except:

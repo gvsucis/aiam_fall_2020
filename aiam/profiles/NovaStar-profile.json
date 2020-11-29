@@ -1,1 +1,1 @@
-{"baseURL": "https://www.novastar.net/careers/", "careersURL": "https://www.novastar.net/careers/", "jobX": "//span[@class='tb_title_accordion']", "locationX": "", "useDriver": true, "newPageX": "", "nextPageX": "", "company": "NovaStar"}
+{"baseURL": "https://www.novastar.net/careers/", "careersURL": "https://www.novastar.net/careers/", "jobX": "//span[@class='tb_title_accordion']", "locationX": "", "useDriver": true, "newPageX": "", "nextPageX": "", "defaultLocation": "Local", "company": "NovaStar"}
