@@ -41,10 +41,6 @@ class Builder_General(Spider_General):
         member = self.member
         # print("HIT")
 
-        # parse json file into dictionary
-        with open(super().PARAM_FILE, 'r') as f:
-            members = json.load(f)['members']
-
         with open(super().MICHIGAN_LOCATIONS_FILE, 'r') as f:
             self.valid_locations = json.load(f)
 
