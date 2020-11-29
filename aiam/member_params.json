@@ -1,13 +1,10 @@
 {
     "members": {
-        "GE Aviation": {
-            "baseURL": "https://www.geaviation.com",
-            "careersURL": "https://jobs.gecareers.com/aviation/global/en/search-results?keywords=michigan",
-            "jobX": "/div[@class='job-title']/span",
-            "locationX": "//span[@class='job-location']",
-            "defaultLocation": "",
-            "nextPageX": "",
-            "useDriver": "true"
+        "XRAY-LAB": {
+            "baseURL": "https://xray-lab.com/us/",
+            "careersURL": "https://xray-lab.com/us/company/career/",
+            "jobX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"grve-box-title\", \" \" ))]//span",
+            "locationX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"grve-box-content\", \" \" ))]//p"
         }
     }
 }

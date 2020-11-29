@@ -20,10 +20,10 @@ ROBOTSTXT_OBEY = False
 
 CONNECTION_STRING = "{drivername}://{user}:{passwd}@{host}:{port}/{db_name}?charset=utf8".format(
     drivername="mysql",
-    user="root",
-    passwd="password",
-    #user="gvsuuzrd",
-    #passwd="capstonecapstone",
+    #user="root",
+    #passwd="password",
+    user="xxx",
+    passwd="capstonecapstone",
     host="localhost",
     port="3306",
     db_name="gvsuuzrd_capstone",
@@ -72,16 +72,17 @@ SPIDER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+'''
 ITEM_PIPELINES = {
     # data cleaning TBD
     'aiam.pipelines.AiamPipeline': 300,
-    'aiam.pipelines.DropJobTablePipeline': 350,
     # create tables if necessary
     'aiam.pipelines.SetupDBTablesPipeline': 400,
     #add jobs if necessary
     'aiam.pipelines.ScrapySpiderPipeline': 600,
     # FIXME update tables
 }
+'''
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

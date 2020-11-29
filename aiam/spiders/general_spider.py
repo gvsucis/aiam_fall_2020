@@ -14,11 +14,37 @@ STATES_FILE = 'states.json'
 class Spider_General(scrapy.Spider):
     name = "general"
 
+    custom_settings = {
+
+        'ITEM_PIPELINES' : {
+            # data cleaning TBD
+            'aiam.pipelines.AiamPipeline': 300,
+            # create tables if necessary
+            'aiam.pipelines.SetupDBTablesPipeline': 400,
+            #add jobs if necessary
+            'aiam.pipelines.ScrapySpiderPipeline': 600,
+            # FIXME update tables
+        }
+    }
+
+
     def __init__(self):
         self.members = {}
         self.valid_locations = {}
         self.valid_states = {}
         super().__init__()
+
+    def create_chrome_instance( self, executable_path ):
+        # selenium on a vps needs a display port to run google chrome
+        #display = Display( visible=0, size=(800,600) )
+        #display.start()
+        # set up webdriver options, then return chrome instance
+        options = webdriver.ChromeOptions()
+        options.add_argument('--disable-extensions')
+        options.add_argument('--headless')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--no-sandbox')
+        return webdriver.Chrome( executable_path=executable_path, chrome_options=options )
 
 
     def cleanup(self, text):
@@ -65,6 +91,8 @@ class Spider_General(scrapy.Spider):
         return zip(joblist, locationlist, linklist)
 
     def start_requests(self):
+
+        ##target_chrome_driver = '/var/www/job_collector/virtualenv/src/aiam_fall_2020/aiam/ChromeDrivers/linux_chromedriver'
         target_chrome_driver = './ChromeDrivers/linux_chromedriver'
         if name == 'nt':
             target_chrome_driver = './ChromeDrivers/chromedriver.exe'
@@ -86,9 +114,8 @@ class Spider_General(scrapy.Spider):
             self.members[member] = members[member]
             # a few of these don't come with the web form, manually add those in
             self.members[member]["company"] = member
-            options = webdriver.ChromeOptions()
-            options.add_argument("--headless")
-            self.members[member]["driver"] = webdriver.Chrome(executable_path=target_chrome_driver,chrome_options=options) # needs instantiation
+            self.members[member]["driver"] = self.create_chrome_instance( target_chrome_driver )
+            print("="*16+'\n'+self.members[member]["careersURL"]+"\n"+"="*16)
             if "nextPageX" not in members[member]:
                 self.members[member]["nextPageX"] = ''
             if "useDriver" not in members[member]:
@@ -101,6 +128,7 @@ class Spider_General(scrapy.Spider):
 
 
     def parse(self, response):
+        
         profile = self.members[ response.meta["company"] ]
         data = {}
 
@@ -109,15 +137,12 @@ class Spider_General(scrapy.Spider):
         company = profile["company"]
         useDriver = profile["useDriver"]
         locationX = profile["locationX"]
-
         defaultLocation = profile["defaultLocation"]
-
         jobX = profile["jobX"]
         nextPageX = profile["nextPageX"]
         careersURL = profile["careersURL"]
 
         f = open('results/' + company + "-jobs.txt", "w")
-
         #print(company + "-jobs.txt")
         jobNum = 0
         # scrape with selenium
@@ -191,5 +216,8 @@ class Spider_General(scrapy.Spider):
                     jobNum += 1
                     f.write(result + ' -- ' + 'Local' + '\n' )
             yield data
-        f.close()
 
+        driver.quit()
+
+        f.close()
+        

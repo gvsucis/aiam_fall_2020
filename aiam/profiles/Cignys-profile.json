@@ -1,1 +1,0 @@
-{"baseURL": "https://www.cignys.com/", "careersURL": "https://www.cignys.com/careers", "jobX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"_3fUtn\", \" \" ))]", "locationX": "", "defaultLocation": "Saginaw, MI", "nextPageX": "", "useDriver": "on", "company": "Cignys"}
