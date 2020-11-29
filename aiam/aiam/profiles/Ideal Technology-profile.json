@@ -1,1 +1,0 @@
-{"baseURL": "https://idealtech.us", "careersURL": "https://idealtech.us/careers/", "jobX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"et_pb_column_5\", \" \" ))]//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"et_pb_button\", \" \" ))]", "locationX": "", "nextPageX": "", "useDriver": "on", "company": "Ideal Technology"}

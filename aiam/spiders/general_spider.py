@@ -5,41 +5,47 @@ import re
 from selenium import webdriver
 from os import name
 from urllib.parse import quote
+#from pyvirtualdisplay import Display
 
 PARAM_FILE = 'member_params.json'
-MICHIGAN_LOCATIONS_FILE = 'michigan_cities.json'
-STATES_FILE = 'states.json'
 
 class Spider_General(scrapy.Spider):
     name = "general"
 
+    custom_settings = {
+
+        'ITEM_PIPELINES' : {
+            # data cleaning TBD
+            'aiam.pipelines.AiamPipeline': 300,
+            # create tables if necessary
+            'aiam.pipelines.SetupDBTablesPipeline': 400,
+            #add jobs if necessary
+            'aiam.pipelines.ScrapySpiderPipeline': 600,
+            # FIXME update tables
+        }
+    }
+
+
     def __init__(self):
         self.members = {}
-        self.valid_locations = {}
-        self.valid_states = {}
         super().__init__()
+
+    def create_chrome_instance( self, executable_path ):
+        # selenium on a vps needs a display port to run google chrome
+        #display = Display( visible=0, size=(800,600) )
+        #display.start()
+        # set up webdriver options, then return chrome instance
+        options = webdriver.ChromeOptions()
+        options.add_argument('--disable-extensions')
+        options.add_argument('--headless')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--no-sandbox')
+        return webdriver.Chrome( executable_path=executable_path, chrome_options=options ) 
 
 
     def cleanup(self, text):
         text = text.strip().strip("\n \t").replace("  ", "").replace("\n", "")
         return text
-    
-    def validate_location(self, location):
-        print("Start of validate location...")
-        s = location
-        s = s.replace(",", "")
-        s = re.sub(r'[0-9]+', '', s)
-        
-        array = s.split(" ")
-        print("HIT")
-        print(array)
-        print(s)
-        for word in array:
-            if word.upper() in self.valid_states:
-                print("SUPPOSED TO PRINT HERE: {}".format(word))
-                if word.upper() != "MI" and word.upper() != "MICHIGAN":
-                    return None
-        return location
 
     def urlencode ( self, url ):
         ret = quote( url ).replace("%3A",":")
@@ -54,17 +60,11 @@ class Spider_General(scrapy.Spider):
                 else:
                     profile[ key ] = scrapeProfile[ key ]
             json.dump( profile, profilef )
-    
-    def balance_lists(self, joblist, defaultlocation="local", defaultlink="", locationlist=None, linklist=None):
-        n = len(joblist)
-        if locationlist == None or len(locationlist) < n:
-            locationlist = [defaultlocation for i in range(n)]
-        if linklist == None or len(linklist) < n:
-            linklist = [defaultlink for i in range(n)]
-        return zip(joblist, locationlist, linklist)
 
-    def start_requests(self):     
-        target_chrome_driver = './ChromeDrivers/linux_chromedriver'
+
+    def start_requests(self):
+
+        target_chrome_driver = '/var/www/job_collector/virtualenv/src/aiam_fall_2020/aiam/ChromeDrivers/linux_chromedriver'
         if name == 'nt':
             target_chrome_driver = './ChromeDrivers/chromedriver.exe'
 
@@ -73,34 +73,24 @@ class Spider_General(scrapy.Spider):
         # parse json file into dictionary
         with open( PARAM_FILE, 'r' ) as f:
             members = json.load( f )[ 'members' ]
-        
-        with open( MICHIGAN_LOCATIONS_FILE, 'r' ) as f:
-            self.valid_locations = json.load(f)
-
-        with open( STATES_FILE, 'r' ) as f:
-            self.valid_states = json.load(f)
 
         for member in members:
             # populate self variables from the current member subdictionary
             self.members[member] = members[member]
             # a few of these don't come with the web form, manually add those in
             self.members[member]["company"] = member
-            options = webdriver.ChromeOptions()
-            options.add_argument("--headless")
-            self.members[member]["driver"] = webdriver.Chrome(executable_path=target_chrome_driver,chrome_options=options) # needs instantiation
+            self.members[member]["driver"] = self.create_chrome_instance( target_chrome_driver )
+            print("="*16+'\n'+self.members[member]["careersURL"]+"\n"+"="*16)            
             if "nextPageX" not in members[member]:
                 self.members[member]["nextPageX"] = ''
             if "useDriver" not in members[member]:
-                self.members[member]["useDriver"] = True
-            if "defaultLocation" not in members[member]:
-                self.members[member]["defaultLocation"] = 'Local'
+                self.members[member]["useDriver"] = "on"
             # supply scrapy with the data
-            ###############AddCompany(self.members[member])
+            AddCompany(self.members[member])
             yield scrapy.Request( url=self.members[member]["careersURL"], callback=self.parse, meta={ "company": member } )
-            
+
 
     def parse(self, response):
-        
         profile = self.members[ response.meta["company"] ]
         data = {}
 
@@ -109,19 +99,17 @@ class Spider_General(scrapy.Spider):
         company = profile["company"]
         useDriver = profile["useDriver"]
         locationX = profile["locationX"]
-
-        defaultLocation = profile["defaultLocation"]
-
         jobX = profile["jobX"]
         nextPageX = profile["nextPageX"]
         careersURL = profile["careersURL"]
 
-        f = open('results/' + company + "-jobs.txt", "w")
+        print("="*16+'\n'+careersURL+"\n"+"="*16)
 
+        f = open('results/' + company + "-jobs.txt", "w")
         #print(company + "-jobs.txt")
         jobNum = 0
         # scrape with selenium
-        if useDriver == True:
+        if useDriver == 'on':
 
             #print("\n\n\nHIT!\n\n\n")
 
@@ -131,27 +119,22 @@ class Spider_General(scrapy.Spider):
             working = True
             while working:
                 jobs = driver.find_elements_by_xpath(jobX)
-                print("This is the length of jobs----------------------------------------")
-                print(len(jobs))
-                locations = driver.find_elements_by_xpath(locationX )
-                l = self.balance_lists(jobs, locationlist=locations, defaultlocation=defaultLocation)
-                
-                for job, location, link in l:
-                    result = self.cleanup(job.text)
-
-                    print("THIS IS THE RESULT")
-                    print(result)
-                    print("This is ENNNNDDDDD of result")
-                    #calls the validate function
-                    result_location = location
-                    try:
-                        result_location = self.validate_location(self.cleanup(location.text))
-                    except:
-                        result_location = location
-
-                    data[jobNum] = {"job": result, "location":result_location, "jobURL":"", "company":company}
-                    jobNum += 1
-                    f.write(result + ' - ' + result_location + '\n' )
+                # location provided
+                if len(locationX) > 0:
+                    locations = driver.find_elements_by_xpath(locationX )
+                    for job, location in zip(jobs,locations):
+                        result = self.cleanup(job.text)
+                        result_location = self.cleanup(location.text)
+                        data[jobNum] = {"job": result, "location":result_location, "jobURL":"", "company":company}
+                        jobNum += 1
+                        f.write(result + ' - ' + result_location + '\n' )
+                # no locations provided, only jobs
+                else:
+                    for job in jobs:
+                        result = self.cleanup(job.text)
+                        data[jobNum] = {"job": result, "location": "Local", "jobURL": "", "company": company}
+                        jobNum += 1
+                        f.write(result + ' -- ' + 'Local' + '\n' )
 
                 # Scrape additional pages if provided
                 if (len(nextPageX)) > 0:
@@ -176,10 +159,7 @@ class Spider_General(scrapy.Spider):
 
                 for job, location in zip(jobs,locations):
                     result = self.cleanup(job.get())
-                    #calling validate locations 
-                    result_location = self.validate_location(self.cleanup(location.get()))
-                    if result_location == None:
-                        continue
+                    result_location = self.cleanup(location.get())
                     data[jobNum] = {"job": result, "location": result_location, "jobURL": "", "company": company}
                     jobNum += 1
                     f.write(result + ' - ' + result_location + '\n' )
@@ -191,5 +171,8 @@ class Spider_General(scrapy.Spider):
                     jobNum += 1
                     f.write(result + ' -- ' + 'Local' + '\n' )
             yield data
-        f.close()
         
+        driver.quit()
+
+        f.close()
+

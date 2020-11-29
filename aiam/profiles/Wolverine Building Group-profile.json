@@ -1,1 +1,1 @@
-{"baseURL": "https://wolvgroup.com/", "careersURL": "https://wolvgroup.com/careers/", "jobX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"offset-lg-1\", \" \" ))]//li", "locationX": "", "company": "Wolverine Building Group", "useDriver": true}
+{"baseURL": "https://wolvgroup.com/", "careersURL": "https://wolvgroup.com/careers/", "jobX": "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"offset-lg-1\", \" \" ))]//li", "locationX": "", "nextPageX": "", "useDriver": "on", "company": "Wolverine Building Group"}

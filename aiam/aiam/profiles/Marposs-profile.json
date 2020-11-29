@@ -1,1 +1,0 @@
-{"baseURL": "https://www.marposs.com/", "careersURL": "https://www.marposs.com/eng/careers", "jobX": "//*[@class='careers__description']/a", "locationX": "//*[@class='careers__net-price']", "nextPageX": "", "useDriver": "off", "company": "Marposs"}
