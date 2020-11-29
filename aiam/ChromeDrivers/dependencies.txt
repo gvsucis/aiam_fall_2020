@@ -1,0 +1,5 @@
+libnss3
+libx11-xcb-dev
+xvfb
+
+pyvirtualdisplay
