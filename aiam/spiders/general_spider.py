@@ -133,7 +133,9 @@ class Spider_General(scrapy.Spider):
                 jobs = driver.find_elements_by_xpath(jobX)
                 print("This is the length of jobs----------------------------------------")
                 print(len(jobs))
-                locations = driver.find_elements_by_xpath(locationX )
+                locations = None
+                if len(locationX) > 0:
+                    locations = driver.find_elements_by_xpath(locationX)
                 l = self.balance_lists(jobs, locationlist=locations, defaultlocation=defaultLocation)
 
                 for job, location, link in l:
