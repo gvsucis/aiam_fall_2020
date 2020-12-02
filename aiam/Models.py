@@ -164,3 +164,13 @@ def addTempCompany( filename ):
             raise
         finally:
             session.close()
+def getTempCompany(company):
+    engine = db_connect()
+    Session = sessionmaker(bind=engine)
+    if not engine.dialect.has_table(engine, "temporary_company_table"):
+        create_tables(engine)
+
+    session = Session()
+    q = session.query(TemporaryCompanyDB).filter(TemporaryCompanyDB.company == company).first()
+    session.close()
+    return q
