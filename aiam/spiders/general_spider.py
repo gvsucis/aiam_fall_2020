@@ -24,13 +24,29 @@ class Spider_General(scrapy.Spider):
         text = text.strip().strip("\n \t").replace("  ", "").replace("\n", "")
         return text
     
+    def get_max_char(self, s):
+        all_freq = {} 
+        valid_list = ['-', ' ']
+        for i in s: 
+            if i in valid_list:
+                if i in all_freq: 
+                    all_freq[i] += 1
+                else: 
+                    all_freq[i] = 1
+        res = max(all_freq, key = all_freq.get)
+        return res
+
     def validate_location(self, location):
         print("Start of validate location...")
         s = location
         s = s.replace(",", "")
         s = re.sub(r'[0-9]+', '', s)
-        
-        array = s.split(" ")
+        print(location)
+        delimeter = self.get_max_char(s)
+        print("THIS IS THE DELIMETER..............")
+        print(delimeter)
+        array = s.split(delimeter)
+
         print("HIT")
         print(array)
         print(s)
