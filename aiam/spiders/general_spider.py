@@ -6,7 +6,7 @@ from os import name
 from urllib.parse import quote
 
 from aiam.Models import addCompany
-from env import *
+from aiam.env import *
 
 class Spider_General(scrapy.Spider):
     name = "general"
@@ -49,13 +49,29 @@ class Spider_General(scrapy.Spider):
         text = text.strip().strip("\n \t").replace("  ", "").replace("\n", "")
         return text
 
+    def get_max_char(self, s):
+        all_freq = {}
+        valid_list = ['-', ' ']
+        for i in s:
+            if i in valid_list:
+                if i in all_freq:
+                    all_freq[i] += 1
+                else:
+                    all_freq[i] = 1
+        res = max(all_freq, key = all_freq.get)
+        return res
+
     def validate_location(self, location):
         print("Start of validate location...")
         s = location
         s = s.replace(",", "")
         s = re.sub(r'[0-9]+', '', s)
+        print(location)
+        delimeter = self.get_max_char(s)
+        print("THIS IS THE DELIMETER..............")
+        print(delimeter)
+        array = s.split(delimeter)
 
-        array = s.split(" ")
         print("HIT")
         print(array)
         print(s)
