@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import (String)
 from sqlalchemy.orm import sessionmaker
 from scrapy.utils.project import get_project_settings
+from json import load, dumps
 
 DeclarativeBase = declarative_base()
 
@@ -61,7 +62,18 @@ class TemporaryCompanyDB(DeclarativeBase):
     nextPageX = Column('nextPageX', String(400))
     useDriver = Column('useDriver', Boolean)
     defaultLocation = Column('defaultLocation', String(400), default="N/A")
-
+    
+    def serialize(self):
+        return {
+                'company':self.company,
+                'companyURL' : self.companyURL,
+                'careersURL' : self.careersURL,
+                'jobX' : self.jobX,
+                'locationX' : self.locationX,
+                'nextPageX' : self.nextPageX,
+                'useDriver' : self.useDriver,
+                'defaultLocation' : self.defaultLocation
+                }
 
 def addCompany(spider):
     engine = db_connect()
@@ -90,6 +102,65 @@ def addCompany(spider):
         except:
             session.rollback()
             print(type(q))
+            raise
+        finally:
+            session.close()
+
+def getTempCompanies():
+    engine = db_connect()
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    create_tables(engine)
+    q = session.query(TemporaryCompanyDB).all()
+    
+    ret = ''
+    # serialize all results
+    for company in q:
+        ret += str( company.serialize() ) + '\n'
+
+    
+    # must print ret for bash script to parse output back into php
+    print(ret)
+
+    # nothing using this right now, but returning just to return something in case needed in future
+    return ret
+
+def addTempCompany( filename ):
+    # NOTE: path needs to be included in the provided filename!
+    data = {}
+    try:
+        with open(filename, 'r') as f:
+            data = load( f )
+    except:
+        with open('logs/db_errors', 'a') as f:
+            f.write('{} Does not exist!\n'.format( filename ) )
+            return
+    
+    engine = db_connect()
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    create_tables(engine)
+    q = session.query(TemporaryCompanyDB).filter(TemporaryCompanyDB.company == data["company"]).first()
+    # add the company record if it doesn't already exist
+    coDB = TemporaryCompanyDB()
+    coDB.company = data["company"]
+    coDB.companyURL = data["baseURL"]
+    coDB.careersURL = data["careersURL"]
+    coDB.jobX = data["jobX"]
+    coDB.locationX = data["locationX"]
+    coDB.nextPageX = data["nextPageX"]
+    coDB.useDriver = data["useDriver"] == True
+
+    if "defaultLocation" in data:
+        coDB.defaultLocation = data["defaultLocation"]
+    if coDB != q:
+        try:
+            if q != None:
+                session.delete(q)
+            session.add(coDB)
+            session.commit()
+        except:
+            session.rollback()
             raise
         finally:
             session.close()
