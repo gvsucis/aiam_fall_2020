@@ -8,7 +8,7 @@ from urllib.parse import quote
 # from pyvirtualdisplay import Display
 from aiam.Models import addCompany
 from aiam.spiders.general_spider import Spider_General
-from env import *
+from aiam.env import *
 
 class Builder_General(Spider_General):
     name = "builder"
