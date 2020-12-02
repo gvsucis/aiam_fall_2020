@@ -1,6 +1,6 @@
 import scrapy
 import json
-from aiam.Models import AddCompany
+from aiam.Models import addCompany
 import re
 from selenium import webdriver
 from os import name

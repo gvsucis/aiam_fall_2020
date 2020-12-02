@@ -1,14 +1,12 @@
 {
     "members": {
-
-        "NovaStar": {
-            "baseURL": "https://www.novastar.net/careers/",
-            "careersURL": "https://www.novastar.net/careers/",
-            "jobX": "//span[@class='tb_title_accordion']",
+        "AerodynamicAdvisory": {
+            "baseURL": "https://aerodynamicadvisory.com/",
+            "careersURL": "https://aerodynamicadvisory.com/careers/currentjobopenings/",
+            "jobX": "//*[@id=\"post-475\"]/div/div/div/div/section[2]/div/div/div/div/div/div/div/div/h2/span/strong",
             "locationX": "",
-            "useDriver": true,
-            "newPageX": "",
             "nextPageX": "",
+            "useDriver": true,
             "defaultLocation": "Local"
         }
     }
