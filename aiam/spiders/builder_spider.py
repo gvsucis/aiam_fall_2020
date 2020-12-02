@@ -8,6 +8,7 @@ from urllib.parse import quote
 # from pyvirtualdisplay import Display
 from aiam.Models import addCompany
 from aiam.spiders.general_spider import Spider_General
+from env import *
 
 class Builder_General(Spider_General):
     name = "builder"
@@ -26,29 +27,28 @@ class Builder_General(Spider_General):
         with open(filename, 'r') as f:
             self.member = json.load(f)
 
-        with open('/var/www/job_collector/virtualenv/src/aiam_fall_2020/aiam/results/output', 'w') as t:
-            t.write(filename)
-            t.write(str(self.member))
+        #with open('/var/www/job_collector/virtualenv/src/aiam_fall_2020/aiam/results/output', 'w') as t:
+        #    t.write(filename)
+        #    t.write(str(self.member))
+
+        with open("/var/www/html/output", "w" ) as f:
+            f.write(filename + "\n")
 
         super().__init__()
 
     def start_requests(self):
-
+        with open("/var/www/html/output","a") as f:
+            f.write("HIT!\n")
         ##target_chrome_driver = '/var/www/job_collector/virtualenv/src/aiam_fall_2020/aiam/ChromeDrivers/linux_chromedriver'
         target_chrome_driver = './ChromeDrivers/linux_chromedriver'
         if name == 'nt':
             target_chrome_driver = './ChromeDrivers/chromedriver.exe'
         member = self.member
-        # print("HIT")
 
-        # parse json file into dictionary
-        with open(super().PARAM_FILE, 'r') as f:
-            members = json.load(f)['members']
-
-        with open(super().MICHIGAN_LOCATIONS_FILE, 'r') as f:
+        with open(MICHIGAN_LOCATIONS_FILE, 'r') as f:
             self.valid_locations = json.load(f)
 
-        with open(super().STATES_FILE, 'r') as f:
+        with open(STATES_FILE, 'r') as f:
             self.valid_states = json.load(f)
 
             # a few of these don't come with the web form, manually add those in
@@ -64,7 +64,8 @@ class Builder_General(Spider_General):
         yield scrapy.Request(url=self.member['careersURL'], callback=self.parse)
 
     def parse(self, response):
-
+        with open("/var/www/html/output","a") as f:
+            f.write("Inside of parse!\n")
         profile = self.member
         data = {}
 
@@ -92,9 +93,10 @@ class Builder_General(Spider_General):
             working = True
             while working:
                 jobs = driver.find_elements_by_xpath(jobX)
-                print("This is the length of jobs----------------------------------------")
-                print(len(jobs))
-                locations = driver.find_elements_by_xpath(locationX)
+                
+                locations = None
+                if len(locationX) > 0:
+                    locations = driver.find_elements_by_xpath(locationX)
                 l = self.balance_lists(jobs, locationlist=locations, defaultlocation=defaultLocation)
 
                 for job, location, link in l:
@@ -124,6 +126,9 @@ class Builder_General(Spider_General):
                         driver.implicitly_wait(5)
                 else:
                     working = False
+
+            with open("/var/www/html/output", "a") as f3:
+                f3.write("Yielding data...\n")
             yield data
 
 
@@ -156,3 +161,6 @@ class Builder_General(Spider_General):
         driver.quit()
 
         f.close()
+
+        with open("/var/www/html/output", "a") as f2:
+            f2.write("END OF PARSE :D\n")

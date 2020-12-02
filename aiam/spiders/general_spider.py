@@ -6,10 +6,7 @@ from os import name
 from urllib.parse import quote
 
 from aiam.Models import addCompany
-
-PARAM_FILE = 'member_params.json'
-MICHIGAN_LOCATIONS_FILE = 'michigan_cities.json'
-STATES_FILE = 'states.json'
+from env import *
 
 class Spider_General(scrapy.Spider):
     name = "general"
@@ -93,8 +90,8 @@ class Spider_General(scrapy.Spider):
 
     def start_requests(self):
 
-        ##target_chrome_driver = '/var/www/job_collector/virtualenv/src/aiam_fall_2020/aiam/ChromeDrivers/linux_chromedriver'
-        target_chrome_driver = './ChromeDrivers/linux_chromedriver'
+        target_chrome_driver = '/var/www/job_collector/virtualenv/src/aiam_fall_2020/aiam/ChromeDrivers/linux_chromedriver'
+        ##target_chrome_driver = './ChromeDrivers/linux_chromedriver'
         if name == 'nt':
             target_chrome_driver = './ChromeDrivers/chromedriver.exe'
 
@@ -157,9 +154,12 @@ class Spider_General(scrapy.Spider):
             working = True
             while working:
                 jobs = driver.find_elements_by_xpath(jobX)
-                print("This is the length of jobs----------------------------------------")
-                print(len(jobs))
-                locations = driver.find_elements_by_xpath(locationX )
+                
+                locations = None
+                if len( locationX ) <= 0:
+                    locations = driver.find_elements_by_xpath(locationX )
+                
+
                 l = self.balance_lists(jobs, locationlist=locations, defaultlocation=defaultLocation)
 
                 for job, location, link in l:
