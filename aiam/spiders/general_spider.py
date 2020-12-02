@@ -149,9 +149,11 @@ class Spider_General(scrapy.Spider):
                 jobs = driver.find_elements_by_xpath(jobX)
                 print("This is the length of jobs----------------------------------------")
                 print(len(jobs))
-                locations = driver.find_elements_by_xpath(locationX )
+                locations = None
+                if len(locationX) > 0:
+                    locations = driver.find_elements_by_xpath(locationX)
                 l = self.balance_lists(jobs, locationlist=locations, defaultlocation=defaultLocation)
-                
+
                 for job, location, link in l:
                     result = self.cleanup(job.text)
 
@@ -192,7 +194,7 @@ class Spider_General(scrapy.Spider):
 
                 for job, location in zip(jobs,locations):
                     result = self.cleanup(job.get())
-                    #calling validate locations 
+                    #calling validate locations
                     result_location = self.validate_location(self.cleanup(location.get()))
                     if result_location == None:
                         continue
@@ -208,4 +210,4 @@ class Spider_General(scrapy.Spider):
                     f.write(result + ' -- ' + 'Local' + '\n' )
             yield data
         f.close()
-        
+

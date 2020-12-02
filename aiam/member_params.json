@@ -1,12 +1,14 @@
 {
     "members": {
-        "Uhy-US": {
-            "baseURL": "https://uhy-us.com/",
-            "careersURL": "https://careers-uhy-us.icims.com/jobs/search?in_iframe=1&hashed=-435653271",
-            "jobX": "//div[@class='col-xs-12 title']/a/span[2]",
-            "locationX": "//div[@class='col-xs-6 header left'] /span[2]",
+
+        "NovaStar": {
+            "baseURL": "https://www.novastar.net/careers/",
+            "careersURL": "https://www.novastar.net/careers/",
+            "jobX": "//span[@class='tb_title_accordion']",
+            "locationX": "",
+            "useDriver": true,
+            "newPageX": "",
             "nextPageX": "",
-            "useDriver": false,
             "defaultLocation": "Local"
         }
     }

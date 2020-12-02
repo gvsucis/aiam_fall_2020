@@ -5,24 +5,32 @@
 
 
 # useful for handling different item types with a single interface
-#from itemadapter import ItemAdapter
-#from sqlalchemy import literal
-#from sqlalchemy.orm import sessionmaker
-#from aiam.Models import JobDB, db_connect, create_tables, delete_table
+from itemadapter import ItemAdapter
+from sqlalchemy import literal
+from sqlalchemy.orm import sessionmaker
+from aiam.Models import JobDB, db_connect, create_tables, drop_job_table
 
-'''
+
 class AiamPipeline:
 	def process_item(self, item, spider):
 		print("XXX{}".format(item));
 		return item
 
+class DropJobTablePipeline:
+    def __init__(self):
+        engine = db_connect()
+        drop_job_table(engine)
+
 
 class SetupDBTablesPipeline(object):
     def __init__(self):
         engine = db_connect()
-        # delete_table(engine)
+        #delete_table(engine)
         self.Session = sessionmaker(bind=engine)
-        if not (engine.dialect.has_table(engine, "job_table") or engine.dialect.has_table(engine, "company_table")):
+        if not (engine.dialect.has_table(engine, "job_table")
+                or engine.dialect.has_table(engine, "company_table")
+                or engine.dialect.has_table(engine, "temporary_company_table")
+        ):
             create_tables(engine)
 
 
@@ -70,4 +78,3 @@ class ScrapySpiderPipeline(object):
 
 
         return items
-'''

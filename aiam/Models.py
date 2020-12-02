@@ -1,6 +1,6 @@
-from sqlalchemy import create_engine, Column, literal
+from sqlalchemy import create_engine, Column, literal, Boolean, MetaData
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import ( String)
+from sqlalchemy import (String)
 from sqlalchemy.orm import sessionmaker
 from scrapy.utils.project import get_project_settings
 
@@ -23,9 +23,14 @@ def delete_table(engine):
     DeclarativeBase.metadata.drop_all(engine)
 
 
+def drop_job_table(engine):
+    table = DeclarativeBase.metadata.tables.get('job_table')
+    DeclarativeBase.metadata.drop_all(engine, [table], checkfirst=True)
+
+
 class JobDB(DeclarativeBase):
     __tablename__ = "job_table"
-    #job location and company uniquely ID a job
+    # job location and company uniquely ID a job
     job = Column('job', String(200), primary_key=True)
     location = Column('location', String(200), primary_key=True)
     jobURL = Column('jobURL', String(400))
@@ -37,28 +42,52 @@ class CompanyDB(DeclarativeBase):
 
     company = Column('company', String(200), primary_key=True)
     companyURL = Column('companyURL', String(200))
-    jobsURL = Column('jobsURL', String(400))
+    careersURL = Column('careersURL', String(400))
+    jobX = Column('jobX', String(400))
+    locationX = Column('locationX', String(400))
+    nextPageX = Column('nextPageX', String(400))
+    useDriver = Column('useDriver', Boolean)
+    defaultLocation = Column('defaultLocation', String(400), default="N/A")
 
 
+class TemporaryCompanyDB(DeclarativeBase):
+    __tablename__ = "temporary_company_table"
 
-class AddCompany():
-    def __init__(self, spider):
-        engine = db_connect()
-        self.Session = sessionmaker(bind=engine)
-        session = self.Session()
-        create_tables(engine)
-        q = session.query(CompanyDB).filter(CompanyDB.company == spider["company"])
-        # add the company record if it doesn't already exist
-        if (not session.query(literal(True)).filter(q.exists()).scalar()):
-            coDB = CompanyDB()
-            coDB.company = spider["company"]
-            coDB.companyURL = spider["baseURL"]
-            coDB.jobsURL = spider["careersURL"]
-            try:
-                session.add(coDB)
-                session.commit()
-            except:
-                session.rollback()
-                raise
-            finally:
-                session.close()
+    company = Column('company', String(200), primary_key=True)
+    companyURL = Column('companyURL', String(200))
+    careersURL = Column('careersURL', String(400))
+    jobX = Column('jobX', String(400))
+    locationX = Column('locationX', String(400))
+    nextPageX = Column('nextPageX', String(400))
+    useDriver = Column('useDriver', Boolean)
+    defaultLocation = Column('defaultLocation', String(400), default="N/A")
+
+
+def addCompany(spider):
+    engine = db_connect()
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    create_tables(engine)
+    q = session.query(CompanyDB).filter(CompanyDB.company == spider["company"]).first()
+    # add the company record if it doesn't already exist
+    coDB = CompanyDB()
+    coDB.company = spider["company"]
+    coDB.companyURL = spider["baseURL"]
+    coDB.careersURL = spider["careersURL"]
+    coDB.jobX = spider["jobX"]
+    coDB.locationX = spider["locationX"]
+    coDB.nextPageX = spider["nextPageX"]
+    coDB.useDriver = spider["useDriver"]
+    if "defaultLocation" in spider:
+        coDB.defaultLocation = spider["defaultLocation"]
+    if coDB != q:
+        try:
+            if q != None:
+                session.delete(q)
+            session.add(coDB)
+            session.commit()
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
