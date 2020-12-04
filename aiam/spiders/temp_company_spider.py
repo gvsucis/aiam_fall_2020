@@ -134,23 +134,18 @@ class Temp_Company_Spider(Spider_General):
             # location provided
             if len(locationX) > 0:
                 locations = response.xpath(locationX + "/text()")
-
-                for job, location in zip(jobs, locations):
-                    result = self.cleanup(job.get())
-                    # calling validate locations
-                    result_location = self.validate_location(self.cleanup(location.get()))
-                    if result_location == None:
-                        continue
-                    data[jobNum] = {"job": result, "location": result_location, "jobURL": "", "company": company}
-                    jobNum += 1
-                    f.write(result + ' - ' + result_location + '\n')
-            # no locations provided, only jobs
-            else:
-                for job in jobs:
-                    result = self.cleanup(job.get())
-                    data[jobNum] = {"job": result, "location": "Local", "jobURL": "", "company": company}
-                    jobNum += 1
-                    f.write(result + ' -- ' + 'Local' + '\n')
+            l = self.balance_lists(jobs, locationlist=locations, defaultlocation=defaultLocation)
+            for job, location, link in l:
+                result = self.cleanup(job.get())
+                # calling validate locations
+                result_location = location
+                try:
+                    result_location = self.validate_location(self.cleanup(location.text))
+                except:
+                    result_location = location
+                data[jobNum] = {"job": result, "location": result_location, "jobURL": careersURL, "company": company}
+                jobNum += 1
+                f.write(result + '--' + result_location + '\n')
             yield data
 
         driver.quit()
