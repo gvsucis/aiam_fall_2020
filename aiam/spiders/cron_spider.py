@@ -2,43 +2,38 @@ import scrapy
 import json
 from os import name
 # from pyvirtualdisplay import Display
-from aiam.Models import getTempCompany, TemporaryCompanyDB
+from aiam.Models import get_all_companies
 from aiam.spiders.general_spider import Spider_General
 from aiam.env import *
 
 
-class Temp_Company_Spider(Spider_General):
-    name = "temp"
+class Cron_Spider(Spider_General):
+    name = "cron"
 
     # NO PIPELINES
     custom_settings = {
         'ITEM_PIPELINES': {
-
+            # data cleaning TBD
+            'aiam.pipelines.AiamPipeline': 300,
+            'aiam.pipelines.DropJobTablePipeline': 350,
+            # create tables if necessary
+            'aiam.pipelines.SetupDBTablesPipeline': 400,
+            # add jobs if necessary
+            'aiam.pipelines.ScrapySpiderPipeline': 600,
+            # FIXME update tables
         }
     }
 
     def __init__(self, company):
-        q = getTempCompany(company)
-        if q is not None:
-            self.member = q.serialize()
-        else:
-            self.member = {}
-
-        with open("/var/www/html/output", "w") as f:
-            f.write(company + "\n")
-
         super().__init__()
 
     def start_requests(self):
-        if "company" not in self.member:
-            ### TODO-Log error
-            yield self.member
+        self.members = get_all_companies()
 
         ##target_chrome_driver = '/var/www/job_collector/virtualenv/src/aiam_fall_2020/aiam/ChromeDrivers/linux_chromedriver'
         target_chrome_driver = './ChromeDrivers/linux_chromedriver'
         if name == 'nt':
             target_chrome_driver = './ChromeDrivers/chromedriver.exe'
-        member = self.member
 
         with open(MICHIGAN_LOCATIONS_FILE, 'r') as f:
             self.valid_locations = json.load(f)
@@ -47,24 +42,16 @@ class Temp_Company_Spider(Spider_General):
             self.valid_states = json.load(f)
 
             # a few of these don't come with the web form, manually add those in
-
-        self.member["driver"] = self.create_chrome_instance(target_chrome_driver)
-        print("=" * 16 + '\n' + self.member["careersURL"] + "\n" + "=" * 16)
-        if "nextPageX" not in member:
-            self.member["nextPageX"] = ''
-        if "useDriver" not in member:
-            self.member["useDriver"] = True
-        if "defaultLocation" not in member:
-            self.member["defaultLocation"] = 'Local'
-        yield scrapy.Request(url=self.member['careersURL'], callback=self.parse)
+        for member in self.members:
+            member["driver"] = self.create_chrome_instance(target_chrome_driver)
+            yield scrapy.Request(url=member['careersURL'], callback=self.parse, meta={"company": member})
 
     def parse(self, response):
         with open("/var/www/html/output", "a") as f:
             f.write("Inside of parse!\n")
-        profile = self.member
+        profile = self.members[response.meta["company"]]
         data = {}
 
-        self.write_profile(profile)
         driver = profile["driver"]
         company = profile["company"]
         useDriver = profile["useDriver"]
@@ -74,7 +61,6 @@ class Temp_Company_Spider(Spider_General):
         nextPageX = profile["nextPageX"]
         careersURL = profile["careersURL"]
 
-        f = open('results/' + company + "-jobs.txt", "w")
         # print(company + "-jobs.txt")
         jobNum = 0
         # scrape with selenium
@@ -107,9 +93,9 @@ class Temp_Company_Spider(Spider_General):
                     except:
                         result_location = location
 
-                    data[jobNum] = {"job": result, "location": result_location, "jobURL": "", "company": company}
+                    data[jobNum] = {"job": result, "location": result_location, "jobURL": careersURL,
+                                    "company": company}
                     jobNum += 1
-                    f.write(result + ' - ' + result_location + '\n')
 
                 # Scrape additional pages if provided
                 if (len(nextPageX)) > 0:
@@ -130,32 +116,25 @@ class Temp_Company_Spider(Spider_General):
         # scrape without selenium
         else:
             jobs = response.xpath(jobX + "/text()")
-            f = open('results/' + company + "-jobs.txt", "w")
             # location provided
+            locations = None
             if len(locationX) > 0:
                 locations = response.xpath(locationX + "/text()")
+            l = self.balance_lists(jobs, locationlist=locations, defaultlocation=defaultLocation)
+            for job, location, link in l:
+                result = self.cleanup(job.get())
+                # calling validate locations
+                result_location = location
+                try:
+                    result_location = self.validate_location(self.cleanup(location.text))
+                except:
+                    result_location = location
+                data[jobNum] = {"job": result, "location": result_location, "jobURL": careersURL, "company": company}
+                jobNum += 1
 
-                for job, location in zip(jobs, locations):
-                    result = self.cleanup(job.get())
-                    # calling validate locations
-                    result_location = self.validate_location(self.cleanup(location.get()))
-                    if result_location == None:
-                        continue
-                    data[jobNum] = {"job": result, "location": result_location, "jobURL": "", "company": company}
-                    jobNum += 1
-                    f.write(result + ' - ' + result_location + '\n')
-            # no locations provided, only jobs
-            else:
-                for job in jobs:
-                    result = self.cleanup(job.get())
-                    data[jobNum] = {"job": result, "location": "Local", "jobURL": "", "company": company}
-                    jobNum += 1
-                    f.write(result + ' -- ' + 'Local' + '\n')
             yield data
 
         driver.quit()
-
-        f.close()
 
         with open("/var/www/html/output", "a") as f2:
             f2.write("END OF PARSE :D\n")

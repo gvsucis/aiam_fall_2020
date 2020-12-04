@@ -65,15 +65,16 @@ class TemporaryCompanyDB(DeclarativeBase):
 
     def serialize(self):
         return {
-                'company':self.company,
-                'companyURL' : self.companyURL,
-                'careersURL' : self.careersURL,
-                'jobX' : self.jobX,
-                'locationX' : self.locationX,
-                'nextPageX' : self.nextPageX,
-                'useDriver' : self.useDriver,
-                'defaultLocation' : self.defaultLocation
-                }
+            'company': self.company,
+            'companyURL': self.companyURL,
+            'careersURL': self.careersURL,
+            'jobX': self.jobX,
+            'locationX': self.locationX,
+            'nextPageX': self.nextPageX,
+            'useDriver': self.useDriver,
+            'defaultLocation': self.defaultLocation
+        }
+
 
 def addCompany(spider):
     engine = db_connect()
@@ -89,13 +90,13 @@ def addCompany(spider):
     coDB.jobX = spider["jobX"]
     coDB.locationX = spider["locationX"]
     coDB.nextPageX = spider["nextPageX"]
-    coDB.useDriver = spider["useDriver"] == "on"
+    coDB.useDriver = spider["useDriver"]
 
     if "defaultLocation" in spider:
         coDB.defaultLocation = spider["defaultLocation"]
     if coDB != q:
         try:
-            if q != None:
+            if q is not None:
                 session.delete(q)
             session.add(coDB)
             session.commit()
@@ -105,6 +106,7 @@ def addCompany(spider):
             raise
         finally:
             session.close()
+
 
 def getTempCompanies():
     engine = db_connect()
@@ -116,8 +118,7 @@ def getTempCompanies():
     ret = ''
     # serialize all results
     for company in q:
-        ret += str( company.serialize() ) + '\n'
-
+        ret += str(company.serialize()) + '\n'
 
     # must print ret for bash script to parse output back into php
     print(ret)
@@ -125,15 +126,16 @@ def getTempCompanies():
     # nothing using this right now, but returning just to return something in case needed in future
     return ret
 
-def addTempCompany( filename ):
+
+def addTempCompany(filename):
     # NOTE: path needs to be included in the provided filename!
     data = {}
     try:
         with open(filename, 'r') as f:
-            data = load( f )
+            data = load(f)
     except:
         with open('logs/db_errors', 'a') as f:
-            f.write('{} Does not exist!\n'.format( filename ) )
+            f.write('{} Does not exist!\n'.format(filename))
             return
 
     engine = db_connect()
@@ -149,13 +151,13 @@ def addTempCompany( filename ):
     coDB.jobX = data["jobX"]
     coDB.locationX = data["locationX"]
     coDB.nextPageX = data["nextPageX"]
-    coDB.useDriver = data["useDriver"] == True
+    coDB.useDriver = data["useDriver"] is True
 
     if "defaultLocation" in data:
         coDB.defaultLocation = data["defaultLocation"]
     if coDB != q:
         try:
-            if q != None:
+            if q is not None:
                 session.delete(q)
             session.add(coDB)
             session.commit()
@@ -164,6 +166,7 @@ def addTempCompany( filename ):
             raise
         finally:
             session.close()
+
 
 def getTempCompany(company):
     engine = db_connect()
@@ -175,3 +178,35 @@ def getTempCompany(company):
     q = session.query(TemporaryCompanyDB).filter(TemporaryCompanyDB.company == company).first()
     session.close()
     return q
+
+
+def moveToMainDB(company):
+    engine = db_connect()
+    Session = sessionmaker(bind=engine)
+    if not engine.dialect.has_table(engine, "company_table"):
+        create_tables(engine)
+
+    session = Session()
+    q = session.query(CompanyDB).filter(CompanyDB.company == company).first()
+    if q is not None:
+        session.delete(q)
+
+    newEntry = session.query(TemporaryCompanyDB).filter(TemporaryCompanyDB.company == company).first()
+    data = newEntry.serialize()
+    session.close()
+    addCompany(data)
+
+
+def get_all_companies():
+    engine = db_connect()
+    Session = sessionmaker(bind=engine)
+    if not engine.dialect.has_table(engine, "company_table"):
+        create_tables(engine)
+
+    session = Session()
+    members = {}
+    companies = session.query(CompanyDB)
+    for company in companies:
+        members[company.company] = company.serialize()
+
+    return members
