@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import (String)
 from sqlalchemy.orm import sessionmaker
 from scrapy.utils.project import get_project_settings
-from json import load, dumps
+from json import load, dumps, dump
 
 DeclarativeBase = declarative_base()
 
@@ -113,15 +113,17 @@ def getTempCompanies():
     create_tables(engine)
     q = session.query(TemporaryCompanyDB).all()
     
-    ret = ''
+    ret = {}
     # serialize all results
+    # will look like: { company1: {profile}, company2: {profile}, company3: {profile}... }
     for company in q:
-        ret += str( company.serialize() ) + '\n'
-
-    
+        new_profile = company.serialize()
+        company_id = new_profile[ 'company' ]
+        ret[ company_id ] = new_profile
+    # json encode the dict of dicts for javascript to read
+    ret = dumps( ret )
     # must print ret for bash script to parse output back into php
     print(ret)
-
     # nothing using this right now, but returning just to return something in case needed in future
     return ret
 
