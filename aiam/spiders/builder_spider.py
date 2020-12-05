@@ -10,16 +10,16 @@ from aiam.Models import addCompany
 from aiam.spiders.general_spider import Spider_General
 from aiam.env import *
 
+
 class Builder_General(Spider_General):
     name = "builder"
 
-    #NO PIPELINES
+    # NO PIPELINES
     custom_settings = {
-        'ITEM_PIPELINES' : {
+        'ITEM_PIPELINES': {
 
         }
     }
-
 
     def __init__(self, filename):
         self.member = {}
@@ -27,17 +27,17 @@ class Builder_General(Spider_General):
         with open(filename, 'r') as f:
             self.member = json.load(f)
 
-        #with open('/var/www/job_collector/virtualenv/src/aiam_fall_2020/aiam/results/output', 'w') as t:
+        # with open('/var/www/job_collector/virtualenv/src/aiam_fall_2020/aiam/results/output', 'w') as t:
         #    t.write(filename)
         #    t.write(str(self.member))
 
-        with open("/var/www/html/output", "w" ) as f:
+        with open("/var/www/html/output", "w") as f:
             f.write(filename + "\n")
 
         super().__init__()
 
     def start_requests(self):
-        with open("/var/www/html/output","a") as f:
+        with open("/var/www/html/output", "a") as f:
             f.write("HIT!\n")
         ##target_chrome_driver = '/var/www/job_collector/virtualenv/src/aiam_fall_2020/aiam/ChromeDrivers/linux_chromedriver'
         target_chrome_driver = './ChromeDrivers/linux_chromedriver'
@@ -56,15 +56,15 @@ class Builder_General(Spider_General):
         self.member["driver"] = self.create_chrome_instance(target_chrome_driver)
         print("=" * 16 + '\n' + self.member["careersURL"] + "\n" + "=" * 16)
         if "nextPageX" not in member:
-             self.member["nextPageX"] = ''
+            self.member["nextPageX"] = ''
         if "useDriver" not in member:
-             self.member["useDriver"] = True
+            self.member["useDriver"] = True
         if "defaultLocation" not in member:
             self.member["defaultLocation"] = 'Local'
         yield scrapy.Request(url=self.member['careersURL'], callback=self.parse)
 
     def parse(self, response):
-        with open("/var/www/html/output","a") as f:
+        with open("/var/www/html/output", "a") as f:
             f.write("Inside of parse!\n")
         profile = self.member
         data = {}
@@ -139,24 +139,18 @@ class Builder_General(Spider_General):
             # location provided
             if len(locationX) > 0:
                 locations = response.xpath(locationX + "/text()")
-
-                for job, location in zip(jobs, locations):
-                    result = self.cleanup(job.get())
-                    # calling validate locations
-                    result_location = self.validate_location(self.cleanup(location.get()))
-                    if result_location == None:
-                        continue
-                    data[jobNum] = {"job": result, "location": result_location, "jobURL": "", "company": company}
-                    jobNum += 1
-                    f.write(result + ' - ' + result_location + '\n')
-            # no locations provided, only jobs
-            else:
-                for job in jobs:
-                    result = self.cleanup(job.get())
-                    data[jobNum] = {"job": result, "location": "Local", "jobURL": "", "company": company}
-                    jobNum += 1
-                    f.write(result + ' -- ' + 'Local' + '\n')
-            yield data
+            l = self.balance_lists(jobs, locationlist=locations, defaultlocation=defaultLocation)
+            for job, location, link in l:
+                result = self.cleanup(job.get())
+                # calling validate locations
+                result_location = location
+                try:
+                    result_location = self.validate_location(self.cleanup(location.text))
+                except:
+                    result_location = location
+                data[jobNum] = {"job": result, "location": result_location, "jobURL": careersURL, "company": company}
+                jobNum += 1
+                f.write(result + '--' + result_location + '\n')
 
         driver.quit()
 
