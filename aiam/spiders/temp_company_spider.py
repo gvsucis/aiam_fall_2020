@@ -1,6 +1,6 @@
 import scrapy
 import json
-from os import name
+from os import name, remove
 # from pyvirtualdisplay import Display
 from aiam.Models import getTempCompany, TemporaryCompanyDB
 from aiam.spiders.general_spider import Spider_General
@@ -23,9 +23,12 @@ class Temp_Company_Spider(Spider_General):
             self.member = q.serialize()
         else:
             self.member = {}
-
-        with open("/var/www/html/output", "w") as f:
-            f.write(company + "\n")
+        
+        # remove results obtained during profile creation by the company
+        try:
+            remove( './results/{}-jobs.txt'.format( company ) ) 
+        except:
+            print("Already deleted!\n")
 
         super().__init__()
 
@@ -104,6 +107,9 @@ class Temp_Company_Spider(Spider_General):
                     result_location = location
                     try:
                         result_location = self.validate_location(self.cleanup(location.text))
+                        if result_location is None:
+                            continue
+
                     except:
                         result_location = location
 
@@ -114,11 +120,14 @@ class Temp_Company_Spider(Spider_General):
                 # Scrape additional pages if provided
                 if (len(nextPageX)) > 0:
                     next_page = driver.find_elements_by_xpath(nextPageX)
-                    if not next_page[0].is_enabled():
-                        break
-                    else:
-                        driver.execute_script("arguments[0].click();", next_page[0])
-                        driver.implicitly_wait(5)
+                    try:
+                        if not next_page[0].is_enabled():
+                            break
+                        else:
+                            driver.execute_script("arguments[0].click();", next_page[0])
+                            driver.implicitly_wait( 3 )
+                    except:
+                        working = False
                 else:
                     working = False
 
@@ -140,11 +149,14 @@ class Temp_Company_Spider(Spider_General):
                 # calling validate locations
                 result_location = location
                 try:
-                    result_location = self.validate_location(self.cleanup(location.text))
+                    result_location = self.validate_location(self.cleanup( location.get() ))
+                    if result_location is None:
+                        continue
                 except:
                     result_location = location
                 data[jobNum] = {"job": result, "location": result_location, "jobURL": careersURL, "company": company}
                 jobNum += 1
+                print( result_location )
                 f.write(result + '--' + result_location + '\n')
             yield data
 

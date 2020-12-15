@@ -21,7 +21,6 @@ class DropJobTablePipeline:
         engine = db_connect()
         drop_job_table(engine)
 
-
 class SetupDBTablesPipeline(object):
     def __init__(self):
         engine = db_connect()
@@ -47,6 +46,8 @@ class ScrapySpiderPipeline(object):
             create_tables(engine)
 
     def process_item(self, items, spider):
+        print("\n\n\nIS IN PIPELINE!\n\n\n\n" )
+
         """
         This method is called for every item pipeline component.
         """
@@ -54,8 +55,9 @@ class ScrapySpiderPipeline(object):
         for key, item in items.items():
             session = self.Session()
             q = session.query(JobDB).filter(
-                JobDB.job == item["job"] and JobDB.location == item["location"] and JobDB.company == item["company"])
-            if (not session.query(literal(True)).filter(q.exists()).scalar()):
+                (JobDB.job == item["job"]) & (JobDB.location == item["location"]) & (JobDB.company == item["company"])).first()
+            if q is None:
+                print("\n\nq is none\n\n")
                 jobdb = JobDB()
                 jobdb.job = item["job"]
                 jobdb.location = item["location"]
@@ -69,12 +71,10 @@ class ScrapySpiderPipeline(object):
                     session.commit()
                 except:
                     session.rollback()
-                    raise
-                finally:
-                    session.close()
-
+                    print("Error in db add job\n")
+            else:
+                print(q.serialize())
+            session.close()
+            
         #session = self.Session()
-
-
-
         return items

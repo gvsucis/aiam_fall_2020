@@ -185,6 +185,8 @@ class Spider_General(scrapy.Spider):
                     result_location = location
                     try:
                         result_location = self.validate_location(self.cleanup(location.text))
+                        if result_location is None:
+                            continue
                     except:
                         result_location = location
 

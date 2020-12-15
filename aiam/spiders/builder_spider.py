@@ -4,12 +4,10 @@ import re
 from selenium import webdriver
 from os import name
 from urllib.parse import quote
-
 # from pyvirtualdisplay import Display
 from aiam.Models import addCompany
 from aiam.spiders.general_spider import Spider_General
 from aiam.env import *
-
 
 class Builder_General(Spider_General):
     name = "builder"
@@ -89,7 +87,6 @@ class Builder_General(Spider_General):
 
             driver.get(careersURL)
             driver.implicitly_wait(5)  # seconds
-
             working = True
             while working:
                 jobs = driver.find_elements_by_xpath(jobX)
@@ -109,6 +106,8 @@ class Builder_General(Spider_General):
                     result_location = location
                     try:
                         result_location = self.validate_location(self.cleanup(location.text))
+                        if result_location is None:
+                            continue
                     except:
                         result_location = location
 
@@ -146,6 +145,8 @@ class Builder_General(Spider_General):
                 result_location = location
                 try:
                     result_location = self.validate_location(self.cleanup(location.text))
+                    if result_location is None:
+                        continue
                 except:
                     result_location = location
                 data[jobNum] = {"job": result, "location": result_location, "jobURL": careersURL, "company": company}

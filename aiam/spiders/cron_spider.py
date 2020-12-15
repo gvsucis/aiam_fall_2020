@@ -24,12 +24,12 @@ class Cron_Spider(Spider_General):
         }
     }
 
-    def __init__(self, company):
+    def __init__(self):
         super().__init__()
 
     def start_requests(self):
         self.members = get_all_companies()
-
+        
         ##target_chrome_driver = '/var/www/job_collector/virtualenv/src/aiam_fall_2020/aiam/ChromeDrivers/linux_chromedriver'
         target_chrome_driver = './ChromeDrivers/linux_chromedriver'
         if name == 'nt':
@@ -43,8 +43,8 @@ class Cron_Spider(Spider_General):
 
             # a few of these don't come with the web form, manually add those in
         for member in self.members:
-            member["driver"] = self.create_chrome_instance(target_chrome_driver)
-            yield scrapy.Request(url=member['careersURL'], callback=self.parse, meta={"company": member})
+            self.members[member]["driver"] = self.create_chrome_instance(target_chrome_driver)
+            yield scrapy.Request(url=self.members[member]['careersURL'], callback=self.parse, meta={"company": member})
 
     def parse(self, response):
         with open("/var/www/html/output", "a") as f:
@@ -90,6 +90,8 @@ class Cron_Spider(Spider_General):
                     result_location = location
                     try:
                         result_location = self.validate_location(self.cleanup(location.text))
+                        if result_location is None:
+                            continue
                     except:
                         result_location = location
 
@@ -126,7 +128,9 @@ class Cron_Spider(Spider_General):
                 # calling validate locations
                 result_location = location
                 try:
-                    result_location = self.validate_location(self.cleanup(location.text))
+                    result_location = self.validate_location(self.cleanup(location.get()))
+                    if result_location is None:
+                        continue
                 except:
                     result_location = location
                 data[jobNum] = {"job": result, "location": result_location, "jobURL": careersURL, "company": company}

@@ -1,0 +1,5 @@
+lxml
+parsel
+w3lib
+twisted
+pyOpenSSL
