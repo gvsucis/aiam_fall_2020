@@ -61,24 +61,35 @@ class Spider_General(scrapy.Spider):
         return res
 
     def validate_location(self, location):
-        print("Start of validate location...")
+        #print("Start of validate location...")
         s = location
-        s = s.replace(",", "")
+        s = s.replace(",", " ")
+        s = s.replace("-", " ")
         s = re.sub(r'[0-9]+', '', s)
-        print(location)
         delimeter = self.get_max_char(s)
-        print("THIS IS THE DELIMETER..............")
-        print(delimeter)
         array = s.split(delimeter)
 
-        print("HIT")
-        print(array)
-        print(s)
+        #if 'MICHIGAN' in location.upper():
+            #print("HIT")
+            #print(array)
+            #print(s)
+        safe_loc = False
         for word in array:
             if word.upper() in self.valid_states:
-                print("SUPPOSED TO PRINT HERE: {}".format(word))
+                #print("SUPPOSED TO PRINT HERE: {}".format(word.upper()))
                 if word.upper() != "MI" and word.upper() != "MICHIGAN":
+                    #   print("Removing: " + location)
                     return None
+                else:
+                    print("Found: " + location)
+                    safe_loc = True
+            
+            if not safe_loc and word.upper() in self.valid_locations:
+                safe_loc = True
+
+        if not safe_loc:
+            return None
+
         return location
 
     def urlencode(self, url):
@@ -102,6 +113,7 @@ class Spider_General(scrapy.Spider):
         if linklist == None or len(linklist) < n:
             linklist = [defaultlink for i in range(n)]
         return zip(joblist, locationlist, linklist)
+
 
     def start_requests(self):
 
@@ -177,10 +189,11 @@ class Spider_General(scrapy.Spider):
 
                 for job, location, link in l:
                     result = self.cleanup(job.text)
-
+                    '''
                     print("THIS IS THE RESULT")
                     print(result)
                     print("This is ENNNNDDDDD of result")
+                    '''
                     # calls the validate function
                     result_location = location
                     try:
@@ -231,3 +244,9 @@ class Spider_General(scrapy.Spider):
         driver.quit()
 
         f.close()
+
+
+    def removeDuplicates(self, data, jobsAdded):
+        for i in range(jobsAdded):
+            data.popitem()
+        return data

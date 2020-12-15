@@ -292,106 +292,160 @@
 					</div>
 				</div>-->
 				<div id="dashboard">
-					<div id="job_filter_div"></div>
-					<div id="location_filter_div"></div>
-					<div id="company_filter_div"></div>
-					<div id="table_div"></div>
+					<div style="width:10vw; display:inline-grid;"></div>
+					<div style="width:800px; height:500px; display:inline-grid;" id="map"></div>
+					<div style="margin-left:10vw; padding:5px; width:400px; height: 500px; overflow:scroll; display:inline-grid;" id="details-dashboard">
+						<div id="details-div">
+						</div>
+					</div>
 				</div>
 			</main>
 
 			<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
 			<script src="scripts/js/scrape_results.js"></script>
+			<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAmo3Pin-AtXw_8joNi4R-7zRk8XxN6lQ&libraries=places&callback=initMap"></script>
+                        <script>
 
-			<script>
-				let showCompanyJobsExample = ( results ) => {
-					google.charts.load('current', {'packages':['table', 'controls']});
-					google.charts.setOnLoadCallback(function() { drawTable( results ) });
-					function drawTable( res ) {
-        					var data = new google.visualization.DataTable();
-        					data.addColumn('string', 'Job Title');
-        					data.addColumn('string', 'Location');
-        					data.addColumn('string', 'Link');
-						data.addColumn('string', 'Company' );
-							
+                                let map;
 
-						let tableOptions = {showRowNumber: true, width: '100%', height: '100%', allowHtml: true, page:'enable', pageSize: 50, sortColumn:0};
-						let rows = [];
-
-						for ( const company in res )
-						{
-							for ( let i=0; i<res[company].length; ++i )
-							{
-								let new_job = res[company][i];
-								rows.push( [ new_job.job, new_job["location"], new_job.jobURL, new_job.company ] );
-							}
-						}	
-					
-						console.log( res );
-        					data.addRows(rows);
-						var dashboard = new google.visualization.Dashboard(document.getElementById('dashboard'));
-						
-						var jobFilter = new google.visualization.ControlWrapper({
-							controlType: 'StringFilter',
-							containerId: 'job_filter_div',
-							options: {
-								filterColumnIndex: 0,
-								matchType: 'any',
-								caseSensitive: false
-							}
-						});
-
-						var locationFilter = new google.visualization.ControlWrapper({
-							controlType: 'StringFilter',
-							containerId: 'location_filter_div',
-							options: {
-								filterColumnIndex: 1,
-								matchType: 'any',
-								caseSensitive: false
-							}
-						});
-						
-						var linkFormatter = new google.visualization.PatternFormat(
-							'<a href="{0}" target="_blank" rel="noopener noreferrer" > More Info </a>');
-
-						linkFormatter.format(data, [2]);
-
-
-						var companyFilter = new google.visualization.ControlWrapper({
-							controlType: 'StringFilter',
-							containerId: 'company_filter_div',
-							options: {
-								filterColumnIndex: 3,
-								matchType: 'any',
-								caseSensitive: false
-							}
-						});
-
-						
-						var table = new google.visualization.ChartWrapper({
-							chartType: 'Table',
-							containerId: 'table_div',
-							options: tableOptions
-						});
-
-        					//table.draw(data, options);
-						dashboard.bind([jobFilter, locationFilter, companyFilter], [table]);
-						dashboard.draw(data);
-      					}
-				}
-	
-
-
-				async function populateCareersExample(){
+				async function getCareerLocations()
+				{
 					let results =  await getCompanyJobResults();
-					showCompanyJobsExample( results )
+					let locations = {};
+					for ( const company in results )
+					{
+						for ( let i=0; i < results[company].length; ++i )
+						{
+							if ( !(results[company][i]["location"] in locations ))
+							{
+								locations[ results[company][i]["location"] ] = [];
+							}
+
+							if ( !(results[company][i] in locations[ results[company][i]["location"] ] ))
+								{
+									locations[ results[company][i]["location"] ].push( results[company][i]);
+								}
+						}
+					}
+					//console.log( locations );
+					return locations;
 				}
 
-			
+                                google.charts.load('current', {'packages':['table', 'controls']});
+				//google.charts.setOnLoadCallback(function() { drawTable( [] ) });
+				function drawTable( res ) {
+					//console.log(res);
+					if ( res.length <= 0 ) {
+						//console.log("AAAA");
+						return;
+					}
+					var data = new google.visualization.DataTable();
+                                                data.addColumn('string', 'Job Title');
+                                                data.addColumn('string', 'Job URL');
+                                                data.addColumn('string', 'Company' );
 
-				$( document ).ready( populateCareersExample() );                              
 
-			</script>
+                                                let tableOptions = {showRowNumber: true, width: '100%', height: '100%', allowHtml: true, page:'enable', pageSize: 50, sortColumn:0};
+                                                let rows = [];
+						//console.log(res);
+                                                for ( let i=0; i<res.length; ++i )
+                                                {
+                                                        //for ( let i=0; i<res[company].length; ++i )
+                                                        //{
+                                                                let new_job = res[i];
+                                                                rows.push( [ new_job.job, new_job.jobURL, new_job.company ] );
+                                                        //}
+                                                }
+						//console.log(rows);
+                                                data.addRows(rows);
+
+                                                //var dashboard = new google.visualization.Dashboard(document.getElementById('details-dashboard'));
+
+                                                var linkFormatter = new google.visualization.PatternFormat(
+                                                        '<a href="{0}" target="_blank" rel="noopener noreferrer" > More Info </a>');
+
+                                                linkFormatter.format(data, [1]);
+
+						
+                                                /*var table = new google.visualization.ChartWrapper({
+                                                        chartType: 'Table',
+                                                        containerId: 'details-div',
+                                                        options: tableOptions
+                                                });*/
+						var table = new google.visualization.Table(document.getElementById('details-div'));
+						//console.log(data );
+						//console.log(table);
+                                                table.draw(data, tableOptions);
+                                                //dashboard.bind( [table] )
+						//dashboard.draw(data);
+                                        }
+
+				async function initMap() {
+					const sydney = new google.maps.LatLng(44.314842, -84.602364);
+					infowindow = new google.maps.InfoWindow();
+					map = new google.maps.Map(document.getElementById("map"), {
+						center: sydney,
+						zoom: 6		});
+					
+					let locations = await getCareerLocations();
+
+					service = new google.maps.places.PlacesService(map);
+					let requests = 1;
+					for ( const loc in locations )
+					{
+						console.log(loc);
+						const request = {
+							query: loc,
+							fields: ["name", "geometry"]
+						}
+						if (requests >= 4) {
+							await new Promise(r => setTimeout(r, 1500));
+							requests = 1;
+						}
+						service.findPlaceFromQuery(request, (results, status) => {
+							if (status === google.maps.places.PlacesServiceStatus.OK) {
+							
+								for (let i = 0; i < results.length; i++) {
+									createMarker( results[i], locations[loc]);
+								}
+								console.log("Valid");
+
+								//map.setCenter(results[0].geometry.location);
+							 } else {
+								 console.log("invalid");
+										       console.log(loc);
+										       console.log(status);
+										       }
+
+						});
+										       ++requests;
+					}
+				}
+
+			function createMarker(place, jobs) {
+				const marker = new google.maps.Marker({
+					map,
+					position: place.geometry.location,
+				});
+				google.maps.event.addListener(marker, "click", () => {
+					infowindow.setContent(place.name);
+					infowindow.open(map);
+					$("#details-div").empty();
+					drawTable( jobs );
+				});
+			}
+
+
+                                async function populateCareersExample(){
+                                        let results =  await getCareerLocations();
+                                        //showCompanyJobsExample( results )
+                                }
+
+                        
+
+                          //$( document ).ready( populateCareersExample() );                              
+
+                        </script>
 
 			<!-- footer -->
 			<footer>

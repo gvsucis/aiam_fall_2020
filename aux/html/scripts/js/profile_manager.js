@@ -8,6 +8,7 @@ const RUN_TEMP_PATH = '/aux/html/scripts/php/test_temp_profile.php';
 const RUN_ACTIVE_PATH = '/aux/html/scripts/php/test_active_profile.php';
 const GET_TEMP_JOB_RESULTS_PATH = '/aux/html/scripts/php/get_temp_job_results.php';
 const GET_ACTIVE_JOB_RESULTS_PATH = '/aux/html/scripts/php/get_active_job_results.php';
+const RUN_ALL_ACTIVE_PROFILES_PATH = '/aux/html/scripts/php/run_all_active_profiles.php';
 
 let getActiveCompanies = async function () {
 	        companies = {};
@@ -118,6 +119,24 @@ let getJobsForTempCompany = async function ( companyName ) {
 	return temp_job_results;
 }
 
+let runAllActiveProfiles = async function () {
+	let ret = "Running";
+	await $.ajax ( {
+		type: "GET",
+		url: RUN_ALL_ACTIVE_PROFILES_PATH,
+		data: {},
+		success: function ( response ) {
+			ret = "Done";
+		},
+		error: function ( err ) {
+			ret = err
+		}
+	} );
+	return "Done";
+}
+let testingStuff = function () {
+	console.log("hewwo");
+}
 const activateProfile = async function ( companyName ) {
 	let ret = "Something went wrong!";
 	await $.ajax({

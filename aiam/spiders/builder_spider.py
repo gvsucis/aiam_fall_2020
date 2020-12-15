@@ -8,6 +8,8 @@ from urllib.parse import quote
 from aiam.Models import addCompany
 from aiam.spiders.general_spider import Spider_General
 from aiam.env import *
+import time
+
 
 class Builder_General(Spider_General):
     name = "builder"
@@ -82,13 +84,17 @@ class Builder_General(Spider_General):
         jobNum = 0
         # scrape with selenium
         if useDriver == True:
-
+            old_jobs = []
             # print("\n\n\nHIT!\n\n\n")
 
             driver.get(careersURL)
             driver.implicitly_wait(5)  # seconds
             working = True
             while working:
+                jobsAdded = 0
+                new_jobs = []
+                # TODO: Change this to optional?? Would require SQL migration
+                time.sleep(1)
                 jobs = driver.find_elements_by_xpath(jobX)
 
                 locations = None
@@ -98,10 +104,7 @@ class Builder_General(Spider_General):
 
                 for job, location, link in l:
                     result = self.cleanup(job.text)
-
-                    print("THIS IS THE RESULT")
-                    print(result)
-                    print("This is ENNNNDDDDD of result")
+                    new_jobs.append(result)
                     # calls the validate function
                     result_location = location
                     try:
@@ -113,21 +116,27 @@ class Builder_General(Spider_General):
 
                     data[jobNum] = {"job": result, "location": result_location, "jobURL": "", "company": company}
                     jobNum += 1
-                    f.write(result + ' - ' + result_location + '\n')
+                    jobsAdded += 1
 
                 # Scrape additional pages if provided
                 if (len(nextPageX)) > 0:
                     next_page = driver.find_elements_by_xpath(nextPageX)
-                    if not next_page[0].is_enabled():
+                    if sorted(new_jobs) == sorted(old_jobs):
+                        data = self.removeDuplicates(data, jobsAdded)
                         break
                     else:
+                        old_jobs = new_jobs
                         driver.execute_script("arguments[0].click();", next_page[0])
                         driver.implicitly_wait(5)
                 else:
                     working = False
 
+            for entry in data:
+                f.write(data[entry]["job"] + ' - ' + data[entry]["location"] + '\n')
+
             with open("/var/www/html/output", "a") as f3:
                 f3.write("Yielding data...\n")
+            
             yield data
 
 

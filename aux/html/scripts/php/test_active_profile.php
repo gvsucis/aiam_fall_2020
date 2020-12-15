@@ -4,7 +4,6 @@
 	$SCRAPE_ENGINE_ROOT_DIR = env_get( "SCRAPE_ENGINE_ROOT_DIR" );
 
 	$company = $_POST[ "company" ];
-
 	$command_template = "cd %s; %s -m scrapy crawl active -a company=\"%s\"";
 	$exec = sprintf( $command_template, $SCRAPE_ENGINE_ROOT_DIR, $PYTHON_VENV_PATH, $company );
 

@@ -41,7 +41,6 @@
 	$target = str_replace( ' ', '_', $_POST[ 'company' ] );               
 
 	$filename = $BUILD_PARAMS_DIR . $target . '_params.json';	
-
 	$f = fopen( $filename, 'w' );
 	fwrite( $f , json_encode($data) );
 	fclose($f);

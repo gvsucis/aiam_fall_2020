@@ -249,8 +249,8 @@
 			<main role="main" style="width:100%; height:100%;">
 				<!-- Pop up inspector menu -->
 				<div id="PopupInspector" style="position: absolute; z-index:10000; width:100%; height:100%;">
-					<div onclick='hideInspector()' style="position: absolute; z-index:10001; width:100%; height:100%; background-color: gray; opacity:0.9;"></div>
-					<div style="position:absolute; padding:15px; margin-top:10vh; margin-left:30vw; width:800px; z-index:150000; height:600px; background-color:white;">
+					<div onclick='hideInspector()' style="position: absolute; z-index:10001; width:100%; height:100%; background-color: gray; opacity:0.9; overflow-x:scroll; overflow-y:scroll;"></div>
+					<div style="position:absolute; padding:15px; margin-top:10vh; margin-left:30vw; width:800px; z-index:150000; height:600px; background-color:white; overflow-x: scroll; overflow-y: scroll">
 						<div id="ProfileMode">
 							<h2 id="InspectorCompanyName" style="border-bottom:1px solid black;"> Profile Inspector </h2>
 							<table id="InspectorTable">
@@ -273,7 +273,7 @@
 						<div style="width:33vw; display:inline-block;"></div>
 						<h1 style="width:50vw; display:inline-block;">Spider Control Panel</h1>
 					</div>
-					<div style="width:32%;height:400px; display:inline-block;">
+					<div style="width:32%; display:inline-grid;">
 						<h3> Profiles awaiting approval </h3>
 						<div style="padding:5px;">
 							
@@ -286,14 +286,17 @@
 						</div>
 					</div>
 					<div style="width:33%; display:inline-block;"></div>
-					<div style="width:30%; height:400px;  display:inline-block;">
-                                                <h3> Active Profiles </h3>
+					<div style="width:30%; display:inline-grid;">
+                                                <h3 style="display:inline-grid;"> Active Profiles </h3>
+						<button style="display:inline-grid;" onclick='runAllScrapes()' >
+							Scrape All Profiles
+						</button>
                                                 <div style="padding:5px;">
                                                          <div id="ActiveLoadingIcon" style="width:100%; height:100%; padding-left:150px; position:absolute;">
                                                                 <img src="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif" alt="processing..." />
                                                         </div>
 
-							<ul id="ActiveProfileList">
+							<ul id="ActiveProfileList"style="overflow:auto;" >
                                                         </ul>
                                                 </div>
 					</div>
@@ -326,6 +329,9 @@
 						let newKeyValueRow = document.createElement( "tr" );
 						let newInspectorKey = document.createElement( "td" );
 						let newInspectorValue = document.createElement( "td" );
+						$(newInspectorKey).css( { 'width':'10vw' } );
+						$(newInspectorValue).css( { 'height': '2vh' } );
+						$(newKeyValueRow).css( { 'margin-top': '3px', 'border': '3px solid gray' } );
 						newInspectorKey.innerHTML = inspectorKey;
 						newInspectorValue.innerHTML = profile[inspectorKey];
 						newKeyValueRow.appendChild( newInspectorKey );
@@ -349,6 +355,23 @@
                                         }
 
                                 }
+
+
+				let runAllScrapes = async () => {
+					$("#TempTestResultsList").empty();	
+					inspectorResultsMode();
+			      	        $("#TestResultsLoadingIcon").show();
+			                $("#PopupInspector").show();
+
+					let results = await runAllActiveProfiles();
+					$("#TestResultsLoadingIcon").hide();
+					let div = document.createElement('div');
+					div.innerHTML = results;
+					$("#TempTestResultsList").append(div);
+
+				}
+
+
 
 
 				let addCompanyProfile = ( data ) => {

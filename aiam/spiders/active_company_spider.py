@@ -5,6 +5,7 @@ from os import name, remove
 from aiam.Models import deleteJobsForCompany, getActiveCompany, CompanyDB
 from aiam.spiders.general_spider import Spider_General
 from aiam.env import *
+import time
 
 
 class Active_Company_Spider(Spider_General):
@@ -80,11 +81,16 @@ class Active_Company_Spider(Spider_General):
         jobNum = 0
         # scrape with selenium
         if useDriver == True:
+            old_jobs = []
             driver.get(careersURL)
             driver.implicitly_wait(5)  # seconds
 
             working = True
             while working:
+                new_jobs = []
+                jobsAdded = 0
+                # TODO: Change this to optional?? Would require SQL migration
+                time.sleep(1)
                 jobs = driver.find_elements_by_xpath(jobX)
 
                 locations = None
@@ -94,7 +100,7 @@ class Active_Company_Spider(Spider_General):
 
                 for job, location, link in l:
                     result = self.cleanup(job.text)
-
+                    new_jobs.append(result)
                     # calls the validate function
                     result_location = location
                     try:
@@ -107,13 +113,16 @@ class Active_Company_Spider(Spider_General):
 
                     data[jobNum] = {"job": result, "location": result_location, "jobURL": careersURL, "company": company}
                     jobNum += 1
+                    jobsAdded += 1
 
                 # Scrape additional pages if provided
                 if (len(nextPageX)) > 0:
                     next_page = driver.find_elements_by_xpath(nextPageX)
-                    if not next_page[0].is_enabled():
+                    if sorted(new_jobs) == sorted(old_jobs): 
+                        data = self.removeDuplicates(data, jobsAdded)
                         break
                     else:
+                        old_jobs = new_jobs
                         driver.execute_script("arguments[0].click();", next_page[0])
                         driver.implicitly_wait(5)
                 else:
