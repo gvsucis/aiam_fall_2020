@@ -66,9 +66,11 @@ class Builder_General(Spider_General):
     def parse(self, response):
         with open("/var/www/html/output", "a") as f:
             f.write("Inside of parse!\n")
+        
+        print(response.text)
+
         profile = self.member
         data = {}
-
         self.write_profile(profile)
         driver = profile["driver"]
         company = profile["company"]

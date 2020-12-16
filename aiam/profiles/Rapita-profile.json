@@ -1,0 +1,1 @@
+{"company": "Rapita", "companyURL": "https://www.rapitasystems.com", "careersURL": "https://www.rapitasystems.com/about/careers", "jobX": "//*[(@id = \"vtable\")]//a", "locationX": "//td[contains(concat( \" \", @class, \" \" ), concat( \" \", \"views-field-field-vacancy-location\", \" \" ))]", "nextPageX": "", "useDriver": true, "defaultLocation": ""}
