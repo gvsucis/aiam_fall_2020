@@ -158,8 +158,9 @@ class Spider_General(scrapy.Spider):
 
         profile = self.get_profile(response)
         data = {}
+        if self.shouldWriteFiles():
+            self.write_profile(profile)
 
-        self.write_profile(profile)
         driver = profile["driver"]
         company = profile["company"]
         useDriver = profile["useDriver"]
@@ -169,7 +170,8 @@ class Spider_General(scrapy.Spider):
         nextPageX = profile["nextPageX"]
         careersURL = profile["careersURL"]
 
-        f = open('results/' + company + "-jobs.txt", "w")
+        if self.shouldWriteFiles():
+            f = open('results/' + company + "-jobs.txt", "w")
         # print(company + "-jobs.txt")
         jobNum = 0
         # scrape with selenium
@@ -208,7 +210,8 @@ class Spider_General(scrapy.Spider):
 
                     data[jobNum] = {"job": result, "location": result_location, "jobURL": "", "company": company}
                     jobNum += 1
-                    f.write(result + ' - ' + result_location + '\n')
+                    if self.shouldWriteFiles():
+                        f.write(result + ' - ' + result_location + '\n')
 
                 # Scrape additional pages if provided
                 if (len(nextPageX)) > 0:
@@ -226,7 +229,8 @@ class Spider_General(scrapy.Spider):
         # scrape without selenium
         else:
             jobs = response.xpath(jobX + "/text()")
-            f = open('results/' + company + "-jobs.txt", "w")
+            if self.shouldWriteFiles():
+                f = open('results/' + company + "-jobs.txt", "w")
             # location provided
             if len(locationX) > 0:
                 locations = response.xpath(locationX + "/text()")
@@ -241,7 +245,8 @@ class Spider_General(scrapy.Spider):
                     result_location = location
                 data[jobNum] = {"job": result, "location": result_location, "jobURL": careersURL, "company": company}
                 jobNum += 1
-                f.write(result + ' -- ' + result_location + '\n')
+                if self.shouldWriteFiles():
+                    f.write(result + ' -- ' + result_location + '\n')
             yield data
 
         driver.quit()
@@ -255,3 +260,7 @@ class Spider_General(scrapy.Spider):
         for i in range(jobsAdded):
             data.popitem()
         return data
+
+    #write the json/results txt files?
+    def shouldWriteFiles(self):
+        return True

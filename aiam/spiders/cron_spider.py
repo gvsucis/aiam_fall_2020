@@ -30,7 +30,7 @@ class Cron_Spider(Spider_General):
 
     def start_requests(self):
         self.members = get_all_companies()
-        
+
         ##target_chrome_driver = '/var/www/job_collector/virtualenv/src/aiam_fall_2020/aiam/ChromeDrivers/linux_chromedriver'
         target_chrome_driver = './ChromeDrivers/linux_chromedriver'
         if name == 'nt':
@@ -109,7 +109,7 @@ class Cron_Spider(Spider_General):
                 # Scrape additional pages if provided
                 if (len(nextPageX)) > 0:
                     next_page = driver.find_elements_by_xpath(nextPageX)
-                    if sorted(new_jobs) == sorted(old_jobs): 
+                    if sorted(new_jobs) == sorted(old_jobs):
                         data = self.removeDuplicates(data, jobsAdded)
                         break
                     else:
@@ -151,3 +151,6 @@ class Cron_Spider(Spider_General):
 
         with open("/var/www/html/output", "a") as f2:
             f2.write("END OF PARSE :D\n")
+
+    def shouldWriteFiles(self):
+        return False

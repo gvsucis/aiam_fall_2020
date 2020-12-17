@@ -7,6 +7,7 @@ from aiam.spiders.general_spider import Spider_General
 from aiam.env import *
 import time
 
+
 class Temp_Company_Spider(Spider_General):
     name = "temp"
 
@@ -23,10 +24,10 @@ class Temp_Company_Spider(Spider_General):
             self.member = q.serialize()
         else:
             self.member = {}
-        
+
         # remove results obtained during profile creation by the company
         try:
-            remove( './results/{}-jobs.txt'.format( company ) ) 
+            remove('./results/{}-jobs.txt'.format(company))
         except:
             print("Already deleted!\n")
 

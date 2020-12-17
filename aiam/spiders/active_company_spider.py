@@ -66,3 +66,6 @@ class Active_Company_Spider(Spider_General):
 
     def get_profile(self, response):
         return self.member
+
+    def shouldWriteFiles(self):
+        return False
