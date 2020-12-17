@@ -59,7 +59,10 @@ class Spider_General(scrapy.Spider):
                     all_freq[i] += 1
                 else:
                     all_freq[i] = 1
-        res = max(all_freq, key=all_freq.get)
+        try:
+            res = max(all_freq, key=all_freq.get)
+        except:
+            res = ' '
         return res
 
     def validate_location(self, location):
