@@ -64,9 +64,6 @@ class Builder_General(Spider_General):
         yield scrapy.Request(url=self.member['careersURL'], callback=self.parse)
 
     def parse(self, response):
-        with open("/var/www/html/output", "a") as f:
-            f.write("Inside of parse!\n")
-        
         profile = self.member
         data = {}
         self.write_profile(profile)

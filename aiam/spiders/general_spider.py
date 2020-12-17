@@ -156,7 +156,7 @@ class Spider_General(scrapy.Spider):
 
     def parse(self, response):
 
-        profile = self.members[response.meta["company"]]
+        profile = self.get_profile(response)
         data = {}
 
         self.write_profile(profile)
@@ -248,6 +248,8 @@ class Spider_General(scrapy.Spider):
 
         f.close()
 
+    def get_profile(self, response):
+        return self.members[response.meta["company"]]
 
     def removeDuplicates(self, data, jobsAdded):
         for i in range(jobsAdded):
