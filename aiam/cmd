@@ -1,0 +1,2 @@
+/var/www/job_collector/virtualenv/bin/python3.8 -m scrapy crawl builder -a filename='build_params/Eaton_params.json'
+

@@ -45,7 +45,7 @@ class Spider_General(scrapy.Spider):
         return webdriver.Chrome(executable_path=executable_path, chrome_options=options)
 
     def cleanup(self, text):
-        text = text.strip().strip("\n \t").replace("  ", "").replace("\n", "")
+        text = text.strip().strip("\n \t").replace("  ", "").replace("\n", " ")
         return text
 
     def get_max_char(self, s):
@@ -63,11 +63,13 @@ class Spider_General(scrapy.Spider):
     def validate_location(self, location):
         #print("Start of validate location...")
         s = location
+        s = s.replace("\n", " ")
         s = s.replace(",", " ")
         s = s.replace("-", " ")
         s = re.sub(r'[0-9]+', '', s)
         delimeter = self.get_max_char(s)
         array = s.split(delimeter)
+
 
         #if 'MICHIGAN' in location.upper():
             #print("HIT")
@@ -75,19 +77,20 @@ class Spider_General(scrapy.Spider):
             #print(s)
         safe_loc = False
         for word in array:
+            word.strip()
             if word.upper() in self.valid_states:
                 #print("SUPPOSED TO PRINT HERE: {}".format(word.upper()))
-                if word.upper() != "MI" and word.upper() != "MICHIGAN":
+                if word.upper() != "MI" and "MICHIGAN" not in word.upper():
                     #   print("Removing: " + location)
                     return None
                 else:
-                    print("Found: " + location)
                     safe_loc = True
-            
+
             if not safe_loc and word.upper() in self.valid_locations:
                 safe_loc = True
 
         if not safe_loc:
+            print("NOT SAFE: " + location + "\n")
             return None
 
         return location

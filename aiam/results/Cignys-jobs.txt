@@ -1,11 +1,11 @@
-Assembler -- Local
-CNC Water Jet Operator -- Local
-Custodian -- Local
-Industrial Painting -- Local
-I.T. Assistant -- Local
-Machinist -- Local
-Quality Inspector -- Local
-Robot Welding -- Local
-Shipping & Receiving -- Local
-Truck Driver -- Local
-Welder -- Local
+Assembler--Saginaw, MI
+CNC Water Jet Operator--Saginaw, MI
+Custodian--Saginaw, MI
+Industrial Painting--Saginaw, MI
+I.T. Assistant--Saginaw, MI
+Machinist--Saginaw, MI
+Quality Inspector--Saginaw, MI
+Robot Welding--Saginaw, MI
+Shipping & Receiving--Saginaw, MI
+Truck Driver--Saginaw, MI
+Welder--Saginaw, MI

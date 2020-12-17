@@ -67,8 +67,6 @@ class Builder_General(Spider_General):
         with open("/var/www/html/output", "a") as f:
             f.write("Inside of parse!\n")
         
-        print(response.text)
-
         profile = self.member
         data = {}
         self.write_profile(profile)
@@ -96,25 +94,25 @@ class Builder_General(Spider_General):
                 jobsAdded = 0
                 new_jobs = []
                 # TODO: Change this to optional?? Would require SQL migration
-                time.sleep(1)
+                time.sleep( 1 )
                 jobs = driver.find_elements_by_xpath(jobX)
 
                 locations = None
                 if len(locationX) > 0:
                     locations = driver.find_elements_by_xpath(locationX)
                 l = self.balance_lists(jobs, locationlist=locations, defaultlocation=defaultLocation)
+                
 
                 for job, location, link in l:
                     result = self.cleanup(job.text)
+                    
                     new_jobs.append(result)
                     # calls the validate function
                     result_location = location
-                    try:
+                    if result_location != defaultLocation:
                         result_location = self.validate_location(self.cleanup(location.text))
                         if result_location is None:
                             continue
-                    except:
-                        result_location = location
 
                     data[jobNum] = {"job": result, "location": result_location, "jobURL": "", "company": company}
                     jobNum += 1
@@ -134,6 +132,8 @@ class Builder_General(Spider_General):
                     working = False
 
             for entry in data:
+                print( type(data[entry]["job"]) )
+                print( type(data[entry]["location"]) )
                 f.write(data[entry]["job"] + ' - ' + data[entry]["location"] + '\n')
 
             with open("/var/www/html/output", "a") as f3:
@@ -147,9 +147,11 @@ class Builder_General(Spider_General):
             jobs = response.xpath(jobX + "/text()")
             f = open('results/' + company + "-jobs.txt", "w")
             # location provided
+            locations = []
             if len(locationX) > 0:
                 locations = response.xpath(locationX + "/text()")
             l = self.balance_lists(jobs, locationlist=locations, defaultlocation=defaultLocation)
+            
             for job, location, link in l:
                 result = self.cleanup(job.get())
                 # calling validate locations
