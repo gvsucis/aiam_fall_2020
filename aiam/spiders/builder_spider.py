@@ -62,3 +62,6 @@ class Builder_General(Spider_General):
         if "defaultLocation" not in member:
             self.member["defaultLocation"] = 'Local'
         yield scrapy.Request(url=self.member['careersURL'], callback=self.parse)
+
+    def get_profile(self, response):
+        return self.member

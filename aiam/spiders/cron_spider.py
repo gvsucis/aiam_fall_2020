@@ -47,6 +47,5 @@ class Cron_Spider(Spider_General):
             self.members[member]["driver"] = self.create_chrome_instance(target_chrome_driver)
             yield scrapy.Request(url=self.members[member]['careersURL'], callback=self.parse, meta={"company": member})
 
-
     def shouldWriteFiles(self):
         return False

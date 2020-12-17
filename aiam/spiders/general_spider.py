@@ -1,3 +1,5 @@
+import time
+
 import scrapy
 import json
 import re
@@ -61,7 +63,7 @@ class Spider_General(scrapy.Spider):
         return res
 
     def validate_location(self, location):
-        #print("Start of validate location...")
+        # print("Start of validate location...")
         s = location
         s = s.replace("\n", " ")
         s = s.replace(",", " ")
@@ -70,16 +72,15 @@ class Spider_General(scrapy.Spider):
         delimeter = self.get_max_char(s)
         array = s.split(delimeter)
 
-
-        #if 'MICHIGAN' in location.upper():
-            #print("HIT")
-            #print(array)
-            #print(s)
+        # if 'MICHIGAN' in location.upper():
+        # print("HIT")
+        # print(array)
+        # print(s)
         safe_loc = False
         for word in array:
             word.strip()
             if word.upper() in self.valid_states:
-                #print("SUPPOSED TO PRINT HERE: {}".format(word.upper()))
+                # print("SUPPOSED TO PRINT HERE: {}".format(word.upper()))
                 if word.upper() != "MI" and "MICHIGAN" not in word.upper():
                     #   print("Removing: " + location)
                     return None
@@ -116,7 +117,6 @@ class Spider_General(scrapy.Spider):
         if linklist == None or len(linklist) < n:
             linklist = [defaultlink for i in range(n)]
         return zip(joblist, locationlist, linklist)
-
 
     def start_requests(self):
 
@@ -155,7 +155,6 @@ class Spider_General(scrapy.Spider):
             yield scrapy.Request(url=self.members[member]["careersURL"], callback=self.parse, meta={"company": member})
 
     def parse(self, response):
-
         profile = self.get_profile(response)
         data = {}
         if self.shouldWriteFiles():
@@ -176,53 +175,56 @@ class Spider_General(scrapy.Spider):
         jobNum = 0
         # scrape with selenium
         if useDriver == True:
-
+            old_jobs = []
             # print("\n\n\nHIT!\n\n\n")
 
             driver.get(careersURL)
             driver.implicitly_wait(5)  # seconds
-
             working = True
             while working:
+                jobsAdded = 0
+                new_jobs = []
+                # TODO: Change this to optional?? Would require SQL migration
+                time.sleep(1)
                 jobs = driver.find_elements_by_xpath(jobX)
 
                 locations = None
-                if len(locationX) <= 0:
+                if len(locationX) > 0:
                     locations = driver.find_elements_by_xpath(locationX)
-
                 l = self.balance_lists(jobs, locationlist=locations, defaultlocation=defaultLocation)
 
                 for job, location, link in l:
                     result = self.cleanup(job.text)
-                    '''
-                    print("THIS IS THE RESULT")
-                    print(result)
-                    print("This is ENNNNDDDDD of result")
-                    '''
+
+                    new_jobs.append(result)
                     # calls the validate function
                     result_location = location
-                    try:
+                    if result_location != defaultLocation:
                         result_location = self.validate_location(self.cleanup(location.text))
                         if result_location is None:
                             continue
-                    except:
-                        result_location = location
 
                     data[jobNum] = {"job": result, "location": result_location, "jobURL": "", "company": company}
                     jobNum += 1
-                    if self.shouldWriteFiles():
-                        f.write(result + ' - ' + result_location + '\n')
+                    jobsAdded += 1
 
                 # Scrape additional pages if provided
                 if (len(nextPageX)) > 0:
                     next_page = driver.find_elements_by_xpath(nextPageX)
-                    if not next_page[0].is_enabled():
+                    if sorted(new_jobs) == sorted(old_jobs):
+                        data = self.removeDuplicates(data, jobsAdded)
                         break
                     else:
+                        old_jobs = new_jobs
                         driver.execute_script("arguments[0].click();", next_page[0])
                         driver.implicitly_wait(5)
                 else:
                     working = False
+
+            if self.shouldWriteFiles():
+                for entry in data:
+                    f.write(data[entry]["job"] + ' - ' + data[entry]["location"] + '\n')
+
             yield data
 
 
@@ -232,26 +234,28 @@ class Spider_General(scrapy.Spider):
             if self.shouldWriteFiles():
                 f = open('results/' + company + "-jobs.txt", "w")
             # location provided
+            locations = []
             if len(locationX) > 0:
                 locations = response.xpath(locationX + "/text()")
             l = self.balance_lists(jobs, locationlist=locations, defaultlocation=defaultLocation)
+
             for job, location, link in l:
                 result = self.cleanup(job.get())
                 # calling validate locations
                 result_location = location
-                try:
-                    result_location = self.validate_location(self.cleanup(location.text))
-                except:
-                    result_location = location
+                if result_location != defaultLocation:
+                    result_location = self.validate_location(self.cleanup(location.get()))
+                    if result_location is None:
+                        continue
                 data[jobNum] = {"job": result, "location": result_location, "jobURL": careersURL, "company": company}
                 jobNum += 1
                 if self.shouldWriteFiles():
-                    f.write(result + ' -- ' + result_location + '\n')
-            yield data
+                    f.write(result + '--' + result_location + '\n')
 
         driver.quit()
 
-        f.close()
+        if self.shouldWriteFiles():
+            f.close()
 
     def get_profile(self, response):
         return self.members[response.meta["company"]]
@@ -261,6 +265,6 @@ class Spider_General(scrapy.Spider):
             data.popitem()
         return data
 
-    #write the json/results txt files?
+    # write the json/results txt files?
     def shouldWriteFiles(self):
         return True
